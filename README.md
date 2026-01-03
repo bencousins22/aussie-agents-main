@@ -9,38 +9,31 @@ Currently, two official plugins are available:
 
 ## Connecting to a Backend
 
-This application connects to a backend API. To configure the connection, you will need to create a `.env` file in the root of the project. You can do this by copying the example file:
+This application is designed to connect to a backend API, making it easy to deploy with services like Vercel and connect to a backend hosted in a Docker container and exposed via ngrok.
+
+### Local Development
+
+For local development, you'll need a `.env` file. Copy the example file to get started:
 
 ```bash
 cp .env.example .env
 ```
 
-Now, open the `.env` file and set the `VITE_API_URL` variable to the address of your backend server.
+Open the `.env` file and change `VITE_NEXT_PUBLIC_API_URL` to point to your local backend server, typically `http://localhost:8000`.
 
-### Using a Local Backend
+### Vercel Deployment with Ngrok
 
-If you are running the backend server on your local machine (e.g., on port 8000), your `.env` file should look like this:
+This project is ready for Vercel integration.
 
-```
-VITE_API_URL=http://localhost:8000
-VITE_API_KEY=
-```
+1.  **Get your Ngrok URL:** Make sure your backend Docker container is running and the ngrok tunnel is active. You will have a public URL similar to `https://<your-id>.ngrok-free.app`.
 
-### Using an Ngrok Tunnel
+2.  **Set Environment Variable in Vercel:** In your Vercel project settings, go to **Settings > Environment Variables**. Add the following variable:
+    -   **Name:** `VITE_NEXT_PUBLIC_API_URL`
+    -   **Value:** Your active ngrok URL (e.g., `https://b0f4a2792304.ngrok-free.app`)
 
-If you are running your local backend through an ngrok tunnel, you will need to set `VITE_API_URL` to your public ngrok address.
+3.  **Deploy:** With the environment variable set, Vercel will build your frontend and automatically connect it to your backend service.
 
-1.  Start your local backend server.
-2.  Start ngrok to expose your local server to the internet (e.g., `ngrok http 8000`).
-3.  Copy the public HTTPS URL provided by ngrok.
-4.  Paste the URL into your `.env` file:
-
-```
-VITE_API_URL=https://<your-ngrok-subdomain>.ngrok.io
-VITE_API_KEY=
-```
-
-**Note:** Remember to restart the Vite development server after making changes to your `.env` file for the new values to take effect.
+Your frontend will now make API calls to the specified ngrok URL.
 
 ## React Compiler
 
