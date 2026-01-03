@@ -1,0 +1,536 @@
+/**
+ * Design Tokens - Aussie Agents
+ * 
+ * This file defines all design tokens used throughout the application.
+ * These tokens ensure consistency and make it easy to maintain the design system.
+ */
+
+:root {
+  /* ============================================
+     SPACING SCALE
+     ============================================ */
+  --spacing-0: 0;
+  --spacing-1: 0.25rem;    /* 4px */
+  --spacing-2: 0.5rem;     /* 8px */
+  --spacing-3: 0.75rem;    /* 12px */
+  --spacing-4: 1rem;       /* 16px */
+  --spacing-5: 1.25rem;    /* 20px */
+  --spacing-6: 1.5rem;     /* 24px */
+  --spacing-8: 2rem;       /* 32px */
+  --spacing-10: 2.5rem;    /* 40px */
+  --spacing-12: 3rem;      /* 48px */
+  --spacing-16: 4rem;      /* 64px */
+  --spacing-20: 5rem;      /* 80px */
+
+  /* ============================================
+     BORDER RADIUS SCALE
+     ============================================ */
+  --radius-none: 0;
+  --radius-sm: 0.5rem;     /* 8px */
+  --radius-md: 0.75rem;    /* 12px */
+  --radius-lg: 1rem;       /* 16px */
+  --radius-xl: 1.25rem;    /* 20px */
+  --radius-2xl: 1.75rem;   /* 28px */
+  --radius-3xl: 2rem;      /* 32px */
+  --radius-4xl: 2.125rem;  /* 34px */
+  --radius-full: 9999px;
+
+  /* ============================================
+     TYPOGRAPHY SCALE
+     ============================================ */
+  
+  /* Font Sizes */
+  --text-2xs: 0.5625rem;   /* 9px */
+  --text-xs: 0.625rem;     /* 10px */
+  --text-sm: 0.75rem;      /* 12px */
+  --text-base: 0.875rem;   /* 14px */
+  --text-md: 0.9375rem;    /* 15px */
+  --text-lg: 1rem;         /* 16px */
+  --text-xl: 1.125rem;     /* 18px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  --text-5xl: 3rem;        /* 48px */
+
+  /* Font Weights */
+  --font-normal: 400;
+  --font-medium: 500;
+  --font-semibold: 600;
+  --font-bold: 700;
+  --font-black: 900;
+
+  /* Letter Spacing */
+  --tracking-tighter: -0.05em;
+  --tracking-tight: -0.011em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.05em;
+  --tracking-wider: 0.1em;
+  --tracking-widest: 0.2em;
+  --tracking-ultra: 0.4em;
+
+  /* Line Heights */
+  --leading-none: 1;
+  --leading-tight: 1.25;
+  --leading-snug: 1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.7;
+  --leading-loose: 2;
+
+  /* ============================================
+     OPACITY SCALE
+     ============================================ */
+  --opacity-0: 0;
+  --opacity-5: 0.05;
+  --opacity-10: 0.1;
+  --opacity-20: 0.2;
+  --opacity-30: 0.3;
+  --opacity-40: 0.4;
+  --opacity-50: 0.5;
+  --opacity-60: 0.6;
+  --opacity-70: 0.7;
+  --opacity-80: 0.8;
+  --opacity-90: 0.9;
+  --opacity-100: 1;
+
+  /* ============================================
+     Z-INDEX SCALE
+     ============================================ */
+  --z-0: 0;
+  --z-10: 10;
+  --z-20: 20;
+  --z-30: 30;
+  --z-40: 40;
+  --z-50: 50;
+  --z-60: 60;
+  --z-100: 100;
+
+  /* ============================================
+     ANIMATION DURATIONS
+     ============================================ */
+  --duration-instant: 100ms;
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --duration-slower: 700ms;
+  --duration-slowest: 1000ms;
+
+  /* ============================================
+     ANIMATION EASINGS
+     ============================================ */
+  --ease-linear: linear;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* ============================================
+     SHADOWS
+     ============================================ */
+  --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-3xl: 0 30px 60px -12px rgba(0, 0, 0, 0.5);
+  --shadow-inner: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+
+  /* Component-specific shadows */
+  --shadow-emerald-glow: 0 0 8px rgba(52, 211, 153, 0.5);
+  --shadow-emerald-strong: 0 0 60px rgba(52, 211, 153, 0.16), 0 0 160px rgba(52, 211, 153, 0.12);
+  --shadow-modal: 0 30px 70px -40px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+  --shadow-button: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  /* ============================================
+     TRANSITIONS
+     ============================================ */
+  --transition-colors: color var(--duration-fast) var(--ease-out),
+                       background-color var(--duration-fast) var(--ease-out),
+                       border-color var(--duration-fast) var(--ease-out);
+  
+  --transition-transform: transform var(--duration-fast) var(--ease-out);
+  
+  --transition-opacity: opacity var(--duration-fast) var(--ease-out);
+  
+  --transition-all: all var(--duration-normal) var(--ease-out);
+
+  /* ============================================
+     COMPONENT TOKENS
+     ============================================ */
+
+  /* Modal */
+  --modal-backdrop: rgba(0, 0, 0, 0.8);
+  --modal-border-radius: var(--radius-2xl);
+  --modal-padding: var(--spacing-6);
+  
+  /* Button */
+  --button-radius: var(--radius-xl);
+  --button-padding-x: var(--spacing-4);
+  --button-padding-y: var(--spacing-2);
+  
+  /* Input */
+  --input-radius: var(--radius-lg);
+  --input-padding-x: var(--spacing-3);
+  --input-padding-y: var(--spacing-2);
+  --input-border-width: 1px;
+  
+  /* Card */
+  --card-radius: var(--radius-xl);
+  --card-padding: var(--spacing-4);
+  
+  /* Badge */
+  --badge-radius: var(--radius-full);
+  --badge-padding-x: var(--spacing-3);
+  --badge-padding-y: var(--spacing-1);
+  
+  /* Toast */
+  --toast-radius: var(--radius-xl);
+  --toast-padding: var(--spacing-4);
+  
+  /* Chat Input */
+  --chat-input-radius: var(--radius-4xl);
+  --chat-input-padding: var(--spacing-4);
+  
+  /* Chat Message */
+  --message-radius: var(--radius-2xl);
+  --message-padding-x: var(--spacing-6);
+  --message-padding-y: var(--spacing-4);
+
+  /* Glass Effects */
+  --glass-bg: color-mix(in oklab, black 25%, transparent);
+  --glass-border: color-mix(in oklab, white 12%, transparent);
+  --glass-blur: 24px;
+  
+  --glass-card-bg: color-mix(in oklab, black 20%, transparent);
+  --glass-card-border: color-mix(in oklab, white 10%, transparent);
+  --glass-card-blur: 28px;
+
+  /* ============================================
+     BREAKPOINTS (for reference in JS)
+     ============================================ */
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ============================================
+     SAFE AREAS (for mobile devices)
+     ============================================ */
+  --safe-area-inset-top: env(safe-area-inset-top, 0);
+  --safe-area-inset-right: env(safe-area-inset-right, 0);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom, 0);
+  --safe-area-inset-left: env(safe-area-inset-left, 0);
+}
+
+/* ============================================
+   SEMANTIC COLOR VARIANTS
+   (Use existing CSS variables from index.css)
+   ============================================ */
+
+:root {
+  /* Enhanced Brand Colors - Professional Teal/Emerald Palette */
+  --color-primary: hsl(162, 73%, 46%);         /* Vibrant teal-emerald */
+  --color-primary-dark: hsl(162, 80%, 35%);    /* Deep emerald */
+  --color-primary-light: hsl(162, 70%, 65%);   /* Light emerald */
+  --color-primary-glow: hsla(162, 73%, 46%, 0.3); /* For glows */
+
+  /* Accent Color - Complementary Purple */
+  --color-accent: hsl(271, 85%, 62%);          /* Vibrant purple */
+  --color-accent-dark: hsl(271, 80%, 48%);     /* Deep purple */
+  --color-accent-light: hsl(271, 75%, 75%);    /* Light purple */
+
+  /* Status Colors - Enhanced Vibrancy */
+  --color-success: hsl(142, 76%, 36%);         /* Rich green */
+  --color-success-light: hsl(142, 70%, 50%);   /* Bright green */
+  --color-warning: hsl(38, 92%, 50%);          /* Vibrant amber */
+  --color-warning-light: hsl(38, 100%, 58%);   /* Bright amber */
+  --color-error: hsl(0, 72%, 51%);             /* Vivid red */
+  --color-error-light: hsl(0, 84%, 60%);       /* Bright red */
+  --color-info: hsl(199, 89%, 48%);            /* Vibrant cyan */
+  --color-info-light: hsl(199, 95%, 58%);      /* Bright cyan */
+
+  /* Surface Colors - Refined Dark Palette */
+  --color-surface-100: hsl(240, 5%, 6%);       /* Almost black */
+  --color-surface-200: hsl(240, 4%, 9%);       /* Very dark */
+  --color-surface-300: hsl(240, 4%, 12%);      /* Dark */
+  --color-surface-400: hsl(240, 3%, 16%);      /* Medium dark */
+  --color-surface-500: hsl(240, 3%, 20%);      /* Medium */
+  
+  /* Text Colors - Better Contrast */
+  --color-text-primary: hsl(0, 0%, 98%);       /* Near white */
+  --color-text-secondary: hsl(0, 0%, 78%);     /* Light gray */
+  --color-text-tertiary: hsl(0, 0%, 58%);      /* Medium gray */
+  --color-text-quaternary: hsl(0, 0%, 38%);    /* Dark gray */
+  --color-text-muted: hsl(0, 0%, 28%);         /* Very dark gray */
+
+  /* Border Colors - Subtle & Refined */
+  --color-border-strong: hsla(0, 0%, 100%, 0.12);  /* Strong border */
+  --color-border-medium: hsla(0, 0%, 100%, 0.08);  /* Medium border */
+  --color-border-light: hsla(0, 0%, 100%, 0.05);   /* Light border */
+  --color-border-subtle: hsla(0, 0%, 100%, 0.03);  /* Very subtle */
+
+  /* Interactive States */
+  --color-hover: hsla(0, 0%, 100%, 0.08);
+  --color-active: hsla(0, 0%, 100%, 0.15);
+  --color-focus: var(--color-primary);
+  --color-disabled: hsla(0, 0%, 50%, 0.3);
+
+  /* Component-Specific Colors */
+  
+  /* Tool Execution (Amber Theme) */
+  --color-tool-bg: hsla(38, 92%, 50%, 0.08);
+  --color-tool-border: hsla(38, 92%, 50%, 0.2);
+  --color-tool: hsl(38, 100%, 58%);
+  --color-tool-glow: hsla(38, 100%, 58%, 0.3);
+
+  /* Agent Reasoning (Purple Theme) */
+  --color-thought-bg: hsla(271, 85%, 62%, 0.05);
+  --color-thought-border: hsla(271, 85%, 62%, 0.12);
+  --color-thought: hsl(271, 85%, 70%);
+  --color-thought-glow: hsla(271, 85%, 62%, 0.25);
+
+  /* Response Cards */
+  --color-response-bg: linear-gradient(
+    180deg,
+    hsla(162, 20%, 15%, 0.4) 0%,
+    hsla(0, 0%, 8%, 0.6) 100%
+  );
+  --color-response-border: hsla(162, 73%, 46%, 0.15);
+  
+  /* User Messages */
+  --color-user-bg: linear-gradient(
+    135deg,
+    hsl(240, 5%, 14%) 0%,
+    hsl(240, 4%, 10%) 50%,
+    hsl(0, 0%, 0%) 100%
+  );
+  --color-user-border: hsla(0, 0%, 100%, 0.08);
+
+  /* Notification/Toast Colors */
+  --color-toast-success-bg: hsla(142, 76%, 36%, 0.12);
+  --color-toast-success-border: hsla(142, 76%, 36%, 0.3);
+  --color-toast-warning-bg: hsla(38, 92%, 50%, 0.12);
+  --color-toast-warning-border: hsla(38, 92%, 50%, 0.3);
+  --color-toast-error-bg: hsla(0, 72%, 51%, 0.12);
+  --color-toast-error-border: hsla(0, 72%, 51%, 0.3);
+  --color-toast-info-bg: hsla(199, 89%, 48%, 0.12);
+  --color-toast-info-border: hsla(199, 89%, 48%, 0.3);
+
+  /* Modal & Overlay */
+  --color-modal-backdrop: hsla(0, 0%, 0%, 0.85);
+  --color-modal-bg: hsl(240, 4%, 9%);
+  --color-modal-border: hsla(0, 0%, 100%, 0.08);
+
+  /* Glass Effects - Enhanced */
+  --color-glass-bg: hsla(0, 0%, 0%, 0.6);
+  --color-glass-border: hsla(0, 0%, 100%, 0.1);
+  --color-glass-highlight: hsla(0, 0%, 100%, 0.05);
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  --gradient-surface: linear-gradient(180deg, var(--color-surface-200) 0%, var(--color-surface-100) 100%);
+  --gradient-glow: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 70%);
+}
+
+/* ============================================
+   TYPOGRAPHY PRESETS
+   ============================================ */
+
+.text-display {
+  font-size: var(--text-3xl);
+  font-weight: var(--font-black);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-heading-1 {
+  font-size: var(--text-2xl);
+  font-weight: var(--font-black);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-heading-2 {
+  font-size: var(--text-xl);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-heading-3 {
+  font-size: var(--text-lg);
+  font-weight: var(--font-bold);
+  line-height: var(--leading-snug);
+}
+
+.text-body {
+  font-size: var(--text-md);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-tight);
+}
+
+.text-body-sm {
+  font-size: var(--text-base);
+  font-weight: var(--font-normal);
+  line-height: var(--leading-normal);
+}
+
+.text-caption {
+  font-size: var(--text-xs);
+  font-weight: var(--font-black);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-widest);
+  text-transform: uppercase;
+}
+
+.text-label {
+  font-size: var(--text-sm);
+  font-weight: var(--font-medium);
+  line-height: var(--leading-normal);
+}
+
+/* ============================================
+   SPACING UTILITIES
+   ============================================ */
+
+.stack-tight { --stack-space: var(--spacing-2); }
+.stack-default { --stack-space: var(--spacing-4); }
+.stack-loose { --stack-space: var(--spacing-6); }
+
+.inline-tight { --inline-space: var(--spacing-2); }
+.inline-default { --inline-space: var(--spacing-4); }
+.inline-loose { --inline-space: var(--spacing-6); }
+
+/* ============================================
+   COMPONENT PADDING VARIANTS
+   ============================================ */
+
+.component-padding-compact {
+  padding-left: var(--spacing-4);
+  padding-right: var(--spacing-4);
+  padding-top: var(--spacing-3);
+  padding-bottom: var(--spacing-3);
+}
+
+.component-padding-default {
+  padding-left: var(--spacing-6);
+  padding-right: var(--spacing-6);
+  padding-top: var(--spacing-4);
+  padding-bottom: var(--spacing-4);
+}
+
+.component-padding-comfortable {
+  padding-left: var(--spacing-8);
+  padding-right: var(--spacing-8);
+  padding-top: var(--spacing-6);
+  padding-bottom: var(--spacing-6);
+}
+
+/* ============================================
+   BUTTON VARIANTS (Base Styles)
+   ============================================ */
+
+.button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  border-radius: var(--button-radius);
+  font-weight: var(--font-bold);
+  transition: var(--transition-colors), var(--transition-transform);
+  outline: none;
+  cursor: pointer;
+}
+
+.button-base:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+.button-base:disabled {
+  opacity: var(--opacity-50);
+  cursor: not-allowed;
+}
+
+.button-sm {
+  padding: var(--spacing-1) var(--spacing-3);
+  font-size: var(--text-sm);
+}
+
+.button-md {
+  padding: var(--spacing-2) var(--spacing-4);
+  font-size: var(--text-base);
+}
+
+.button-lg {
+  padding: var(--spacing-3) var(--spacing-6);
+  font-size: var(--text-lg);
+}
+
+/* ============================================
+   CARD VARIANTS
+   ============================================ */
+
+.card-base {
+  border-radius: var(--card-radius);
+  padding: var(--card-padding);
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+.card-interactive {
+  transition: var(--transition-colors), var(--transition-transform);
+  cursor: pointer;
+}
+
+.card-interactive:hover {
+  transform: translateY(-2px);
+}
+
+/* ============================================
+   FOCUS UTILITIES
+   ============================================ */
+
+.focus-ring {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.focus-ring-inset {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+/* ============================================
+   ANIMATION UTILITIES
+   ============================================ */
+
+.transition-default {
+  transition: var(--transition-all);
+}
+
+.transition-colors {
+  transition: var(--transition-colors);
+}
+
+.transition-transform {
+  transition: var(--transition-transform);
+}
+
+.transition-opacity {
+  transition: var(--transition-opacity);
+}
+
+.hover-lift {
+  transition: var(--transition-transform);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.active-scale:active {
+  transform: scale(0.95);
+}
