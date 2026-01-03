@@ -100,7 +100,7 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
                   AA
                 </div>
                 <span id="modal-heading" className="font-semibold text-white">
-                  {headingText}
+                  {heading}
                 </span>
               </div>
 
@@ -182,7 +182,7 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
                 <span className="text-caption text-white/40">Aussie Agents</span>
                 {timestamp && <span className="text-[10px] text-white/20 font-medium">{timestamp}</span>}
               </div>
-              <span className="font-bold text-md tracking-tight text-white/95">{headingText}</span>
+              <span className="font-bold text-md tracking-tight text-white/95">{heading}</span>
             </div>
           </div>
 

@@ -2,13 +2,17 @@
 
 import type { PollResponse } from "./types";
 
+// Get API base URL from environment variable
+const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+
 let csrfToken: string | null = null;
 
 async function getCsrfToken(): Promise<string> {
   if (csrfToken) return csrfToken;
 
-  const response = await fetch("/csrf_token", {
-    credentials: "same-origin",
+  const response = await fetch(`${API_BASE_URL}/csrf_token`, {
+    credentials: "include",
+    mode: "cors",
   });
 
   if (response.redirected && response.url.endsWith("/login")) {
@@ -26,7 +30,7 @@ async function getCsrfToken(): Promise<string> {
 
   csrfToken = json.token;
   if (json.runtime_id) {
-    document.cookie = `csrf_token_${json.runtime_id}=${csrfToken}; SameSite=Strict; Path=/`;
+    document.cookie = `csrf_token_${json.runtime_id}=${csrfToken}; SameSite=None; Secure; Path=/`;
   }
   return csrfToken;
 }
@@ -39,8 +43,11 @@ export async function fetchApi(url: string, init?: RequestInit): Promise<Respons
     const headers = new Headers(finalInit.headers || undefined);
     headers.set("X-CSRF-Token", token);
     finalInit.headers = headers;
+    finalInit.credentials = "include";
+    finalInit.mode = "cors";
 
-    const res = await fetch(url, finalInit);
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+    const res = await fetch(fullUrl, finalInit);
 
     if (res.status === 403 && retry) {
       csrfToken = null;

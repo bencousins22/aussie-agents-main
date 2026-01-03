@@ -62,14 +62,26 @@ export default defineConfig({
         secure: false,
         cookieDomainRewrite: "",
         withCredentials: true,
-        configure: (proxy, _options) => {
-          _proxy.on('error', (err, _req, _res) => {
+        configure: (
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          _proxy,
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
+          _options
+        ) => {
+          _proxy.on(
+            'error',
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            (err, _req, _res) => {
             console.log('proxy error', err);
           });
-          _proxy.on('proxyReq', (proxyReq, req, _res) => {
+          _proxy.on('proxyReq', (proxyReq, req,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            _res) => {
             console.log('Sending Request to the Target:', req.method, req.url);
           });
-          _proxy.on('proxyRes', (proxyRes, req, _res) => {
+          _proxy.on('proxyRes', (proxyRes, req,
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            _res) => {
             console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
           });
         },
