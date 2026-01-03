@@ -123,35 +123,20 @@ export type TunnelStatusResponse = {
   error?: string;
 };
 
+export type PollResponse = {
+  messages?: Array<{ content: string; role: string; timestamp: number }>;
+  log?: string[];
+  notifications?: any[];
+  error?: string;
+};
+
 export const agentZeroApi = {
-  // ... existing methods
-  tunnelStatus(): Promise<TunnelStatusResponse> {
-    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "get" });
-  },
-
-  tunnelCreate(provider: string = "serveo", port?: number): Promise<TunnelStatusResponse> {
-    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "create", provider, port });
-  },
-
-  tunnelStop(): Promise<TunnelStatusResponse> {
-    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "stop" });
-  },
-
-  tunnelVerify(url: string): Promise<TunnelStatusResponse> {
-    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "verify", url });
-  },
+  // Health check
   health(): Promise<HealthResponse> {
     return callJsonApi<HealthResponse>("/health", null);
   },
 
-  settingsGet(): Promise<SettingsGetResponse> {
-    return fetchApi("/settings_get", { method: "GET" }).then(async (r) => (await r.json()) as SettingsGetResponse);
-  },
-
-  settingsSet(settingsPayload: any): Promise<SettingsSetResponse> {
-    return callJsonApi<SettingsSetResponse>("/settings_set", settingsPayload);
-  },
-
+  // Chat operations
   chatCreate(args: { current_context?: string; new_context?: string }): Promise<ChatCreateResponse> {
     return callJsonApi<ChatCreateResponse>("/chat_create", {
       current_context: args.current_context || "",
@@ -179,14 +164,90 @@ export const agentZeroApi = {
     return callJsonApi<ChatFilesPathResponse>("/chat_files_path_get", { ctxid });
   },
 
+  // Message operations
+  async sendMessageAsync(args: {
+    context: string | null;
+    messageId: string;
+    text: string;
+    attachments: File[];
+  }): Promise<{ message: string; context: string }> {
+    if (args.attachments.length > 0) {
+      const formData = new FormData();
+      formData.append("text", args.text);
+      formData.append("context", args.context || "");
+      formData.append("message_id", args.messageId);
+      for (const file of args.attachments) {
+        formData.append("attachments", file);
+      }
+
+      const res = await fetchApi("/message_async", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const err = await res.text();
+        throw new Error(err);
+      }
+
+      return (await res.json()) as { message: string; context: string };
+    }
+
+    const res = await fetchApi("/message_async", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        text: args.text,
+        context: args.context,
+        message_id: args.messageId,
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(err);
+    }
+
+    return (await res.json()) as { message: string; context: string };
+  },
+
+  // Poll for responses
+  poll(args: {
+    context: string | null;
+    logFrom: number;
+    notificationsFrom: number;
+  }): Promise<PollResponse> {
+    const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    return callJsonApi<PollResponse>("/poll", {
+      log_from: args.logFrom,
+      notifications_from: args.notificationsFrom,
+      context: args.context,
+      timezone,
+    });
+  },
+
+  // Settings
+  settingsGet(): Promise<SettingsGetResponse> {
+    return fetchApi("/settings_get", { method: "GET" }).then(async (r) => (await r.json()) as SettingsGetResponse);
+  },
+
+  settingsSet(settingsPayload: any): Promise<SettingsSetResponse> {
+    return callJsonApi<SettingsSetResponse>("/settings_set", settingsPayload);
+  },
+
+  // Projects
   projects(action: string, payload: Record<string, any> = {}): Promise<ProjectsResponse> {
     return callJsonApi<ProjectsResponse>("/projects", { action, ...payload });
   },
 
+  // Memory
   memoryDashboard(action: string, payload: Record<string, any> = {}): Promise<MemoryDashboardResponse> {
     return callJsonApi<MemoryDashboardResponse>("/memory_dashboard", { action, ...payload });
   },
 
+  // Notifications
   notificationsHistory(): Promise<NotificationsHistoryResponse> {
     return callJsonApi<NotificationsHistoryResponse>("/notifications_history", null);
   },
@@ -195,6 +256,7 @@ export const agentZeroApi = {
     return callJsonApi<NotificationsClearResponse>("/notifications_clear", null);
   },
 
+  // Scheduler
   schedulerTasksList(timezone?: string): Promise<SchedulerTasksListResponse> {
     return callJsonApi<SchedulerTasksListResponse>("/scheduler_tasks_list", timezone ? { timezone } : {});
   },
@@ -219,6 +281,7 @@ export const agentZeroApi = {
     return callJsonApi<any>("/scheduler_tick", payload);
   },
 
+  // Backup
   backupGetDefaults(): Promise<BackupDefaultsResponse> {
     return callJsonApi<BackupDefaultsResponse>("/backup_get_defaults", null);
   },
@@ -295,6 +358,7 @@ export const agentZeroApi = {
     return (await res.json()) as BackupRestoreResponse;
   },
 
+  // Work directory
   async getWorkDirFiles(path: string): Promise<GetWorkDirFilesResponse> {
     const url = new URL("/get_work_dir_files", window.location.origin);
     url.searchParams.set("path", path);
@@ -346,6 +410,7 @@ export const agentZeroApi = {
     return await res.blob();
   },
 
+  // MCP servers
   mcpServersStatus(): Promise<McpServersStatusResponse> {
     return callJsonApi<McpServersStatusResponse>("/mcp_servers_status", null);
   },
@@ -354,6 +419,7 @@ export const agentZeroApi = {
     return callJsonApi<McpServersApplyResponse>("/mcp_servers_apply", { mcp_servers });
   },
 
+  // Agent control
   pause(context: string, paused: boolean): Promise<PauseResponse> {
     return callJsonApi<PauseResponse>("/pause", { context, paused });
   },
@@ -364,5 +430,22 @@ export const agentZeroApi = {
 
   restart(): Promise<RestartResponse> {
     return callJsonApi<RestartResponse>("/restart", null);
+  },
+
+  // Tunnel operations
+  tunnelStatus(): Promise<TunnelStatusResponse> {
+    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "get" });
+  },
+
+  tunnelCreate(provider: string = "serveo", port?: number): Promise<TunnelStatusResponse> {
+    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "create", provider, port });
+  },
+
+  tunnelStop(): Promise<TunnelStatusResponse> {
+    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "stop" });
+  },
+
+  tunnelVerify(url: string): Promise<TunnelStatusResponse> {
+    return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "verify", url });
   },
 };

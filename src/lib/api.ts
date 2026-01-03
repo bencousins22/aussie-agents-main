@@ -2,69 +2,45 @@
 
 import type { PollResponse } from "./types";
 
-// Get API base URL from environment variable
+// Get API base URL and API key from environment variables
 const API_BASE_URL = import.meta.env.VITE_API_URL || '';
-
-let csrfToken: string | null = null;
-
-async function getCsrfToken(): Promise<string> {
-  if (csrfToken) return csrfToken;
-
-  const response = await fetch(`${API_BASE_URL}/csrf_token`, {
-    credentials: "include",
-    mode: "cors",
-  });
-
-  if (response.redirected && response.url.endsWith("/login")) {
-    if (window.location.pathname !== "/login") {
-      window.location.href = "/login";
-    }
-    throw new Error("Redirected to login");
-  }
-
-  const json = (await response.json()) as { ok: boolean; token?: string; error?: string; runtime_id?: string };
-
-  if (!json.ok || !json.token) {
-    throw new Error(json.error || "Failed to get CSRF token");
-  }
-
-  csrfToken = json.token;
-  if (json.runtime_id) {
-    document.cookie = `csrf_token_${json.runtime_id}=${csrfToken}; SameSite=None; Secure; Path=/`;
-  }
-  return csrfToken;
-}
+const API_KEY = import.meta.env.VITE_API_KEY || '';
 
 export async function fetchApi(url: string, init?: RequestInit): Promise<Response> {
-  async function wrap(retry: boolean): Promise<Response> {
-    const token = await getCsrfToken();
-
-    const finalInit: RequestInit = init ? { ...init } : {};
-    const headers = new Headers(finalInit.headers || undefined);
-    headers.set("X-CSRF-Token", token);
-    finalInit.headers = headers;
+  const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+  
+  const finalInit: RequestInit = init ? { ...init } : {};
+  const headers = new Headers(finalInit.headers || undefined);
+  
+  // Add API key header if available
+  if (API_KEY) {
+    headers.set("X-API-KEY", API_KEY);
+  }
+  
+  // For cross-origin requests, we need to handle credentials carefully
+  // When using API key auth, we don't need session cookies
+  finalInit.headers = headers;
+  finalInit.mode = "cors";
+  
+  // Only include credentials if we're not using API key (for local development)
+  if (!API_KEY) {
     finalInit.credentials = "include";
-    finalInit.mode = "cors";
-
-    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
-    const res = await fetch(fullUrl, finalInit);
-
-    if (res.status === 403 && retry) {
-      csrfToken = null;
-      return wrap(false);
-    }
-
-    if (res.redirected && res.url.endsWith("/login")) {
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
-      }
-      throw new Error("Redirected to login");
-    }
-
-    return res;
   }
 
-  return wrap(true);
+  const res = await fetch(fullUrl, finalInit);
+
+  // Handle authentication errors
+  if (res.status === 401) {
+    const errorText = await res.text();
+    throw new Error(`Authentication failed: ${errorText}`);
+  }
+
+  if (res.status === 403) {
+    const errorText = await res.text();
+    throw new Error(`Access denied: ${errorText}`);
+  }
+
+  return res;
 }
 
 export async function callJsonApi<T>(endpoint: string, data: any): Promise<T> {
