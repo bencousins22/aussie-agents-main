@@ -153,7 +153,7 @@ export function Sidebar({
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-50 w-72 min-w-56 max-w-80 bg-card border-r border-border flex flex-col transform transition-transform duration-300 ease-in-out shadow-2xl",
+          "fixed inset-y-0 left-0 z-50 w-64 sm:w-72 min-w-56 max-w-80 bg-card border-r border-border flex flex-col transform transition-transform duration-300 ease-in-out shadow-2xl",
           isOpen ? "translate-x-0" : "-translate-x-full"
         )}
         role="navigation"

@@ -19,7 +19,7 @@ For local development, you'll need a `.env` file. Copy the example file to get s
 cp .env.example .env
 ```
 
-Open the `.env` file and change `VITE_NEXT_PUBLIC_API_URL` to point to your local backend server, typically `http://localhost:8000`.
+Open the `.env` file and change `VITE_API_URL` to point to your local backend server, typically `http://localhost:8000`.
 
 ### Vercel Deployment with Ngrok
 
@@ -28,7 +28,7 @@ This project is ready for Vercel integration.
 1.  **Get your Ngrok URL:** Make sure your backend Docker container is running and the ngrok tunnel is active. You will have a public URL similar to `https://<your-id>.ngrok-free.app`.
 
 2.  **Set Environment Variable in Vercel:** In your Vercel project settings, go to **Settings > Environment Variables**. Add the following variable:
-    -   **Name:** `VITE_NEXT_PUBLIC_API_URL`
+    -   **Name:** `VITE_API_URL`
     -   **Value:** Your active ngrok URL (e.g., `https://b0f4a2792304.ngrok-free.app`)
 
 3.  **Deploy:** With the environment variable set, Vercel will build your frontend and automatically connect it to your backend service.
