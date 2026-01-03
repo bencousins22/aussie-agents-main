@@ -1,0 +1,28 @@
+services:
+  agent-zero-react:
+    container_name: agent-zero-react
+    image: agent0ai/agent-zero:latest
+    volumes:
+      - ../../:/a0
+      - ../../webui-react/dist:/a0/webui
+      - ../../.env:/a0/.env
+    ports:
+      - "50001:80"
+      - "2222:22"
+    environment:
+      - BRANCH=local
+      - ROOT_PASSWORD=jamie
+      - AUTH_LOGIN=jamie
+      - AUTH_PASSWORD=jamie
+      - API_KEY_ANTHROPIC=${API_KEY_ANTHROPIC}
+      - API_KEY_OPENAI=${API_KEY_OPENAI}
+      - API_KEY_GROQ=${API_KEY_GROQ}
+      - API_KEY_OLLAMA=${API_KEY_OLLAMA}
+      - API_KEY_GOOGLE=${API_KEY_GOOGLE}
+      - API_KEY_MISTRAL=${API_KEY_MISTRAL}
+      - API_KEY_DEEPSEEK=${API_KEY_DEEPSEEK}
+      - API_KEY_OPENROUTER=${API_KEY_OPENROUTER}
+      - API_KEY_XAI=${API_KEY_XAI}
+    restart: unless-stopped
+    stdin_open: true
+    tty: true

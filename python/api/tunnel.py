@@ -1,6 +1,7 @@
 from python.helpers.api import ApiHandler, Request, Response
 from python.helpers import runtime
 from python.helpers.tunnel_manager import TunnelManager
+import os
 
 class Tunnel(ApiHandler):
     async def process(self, input: dict, request: Request) -> dict | Response:
@@ -15,7 +16,14 @@ async def process(input: dict) -> dict | Response:
         return {"success": True}
     
     if action == "create":
-        port = runtime.get_web_ui_port()
+        # Determine the correct port to use (same logic as tunnel manager)
+        port = None
+        if os.getenv('DOCKERIZED', '').lower() == 'true':
+            port = 80  # Docker runs on port 80
+        else:
+            # For local development, tunnel to React frontend
+            port = 5173  # React dev server
+        
         provider = input.get("provider", "serveo")  # Default to serveo
         tunnel_url = tunnel_manager.start_tunnel(port, provider)
         if tunnel_url is None:

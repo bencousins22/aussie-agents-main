@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  agent-zero-react:
+    build:
+      context: .
+      dockerfile: Dockerfile.react
+      args:
+        BRANCH: local
+        CACHE_DATE: ${CACHE_DATE:-none}
+    container_name: agent-zero-react
+    ports:
+      - "50001:80"          # React frontend
+      - "50080:50080"       # API backend
+      - "2222:22"           # SSH
+      - "9000-9009:9000-9009"  # Additional services
+    volumes:
+      # Mount local directories for persistence
+      - ./memory:/git/agent-zero/memory
+      - ./knowledge:/git/agent-zero/knowledge
+      - ./logs:/git/agent-zero/logs
+      - ./tmp:/git/agent-zero/tmp
+      - ./usr:/git/agent-zero/usr
+    environment:
+      - BRANCH=local
+      # Add any additional environment variables you need
+      # - API_KEY=your_api_key
+    restart: unless-stopped
+    networks:
+      - agent-zero-network
+    stdin_open: true
+    tty: true
+
+networks:
+  agent-zero-network:
+    driver: bridge

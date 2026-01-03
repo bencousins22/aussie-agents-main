@@ -37,10 +37,29 @@ webapp.secret_key = os.getenv("FLASK_SECRET_KEY") or secrets.token_hex(32)
 webapp.config.update(
     JSON_SORT_KEYS=False,
     SESSION_COOKIE_NAME="session_" + runtime.get_runtime_id(),  # bind the session cookie name to runtime id to prevent session collision on same host
-    SESSION_COOKIE_SAMESITE="Strict",
+    SESSION_COOKIE_SAMESITE="None",  # Changed from Strict to None for cross-origin
+    SESSION_COOKIE_SECURE=True,  # Required when SameSite=None
     SESSION_PERMANENT=True,
     PERMANENT_SESSION_LIFETIME=timedelta(days=1)
 )
+
+# Add CORS headers to all responses
+@webapp.after_request
+def add_cors_headers(response):
+    origin = request.headers.get('Origin')
+    # Allow requests from Vercel and ngrok
+    allowed_origins = [
+        'https://webui-react.vercel.app',
+        'https://webui-react-o9sbo185t-biometglobal-4609s-projects.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:3000'
+    ]
+    if origin in allowed_origins or origin and ('vercel.app' in origin or 'ngrok' in origin):
+        response.headers['Access-Control-Allow-Origin'] = origin
+        response.headers['Access-Control-Allow-Credentials'] = 'true'
+        response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS'
+        response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization, X-API-KEY'
+    return response
 
 lock = threading.Lock()
 
@@ -153,24 +172,19 @@ async def login_handler():
         user = dotenv.get_dotenv_value("AUTH_LOGIN")
         password = dotenv.get_dotenv_value("AUTH_PASSWORD")
         
-        if request.form['username'] == user and request.form['password'] == password:
+        # Use .get() to avoid KeyErrors and match the React form names
+        form_user = request.form.get('username')
+        form_pass = request.form.get('password')
+        
+        if form_user == user and form_pass == password:
             session['authentication'] = login.get_credentials_hash()
-            return redirect(url_for('serve_index'))
+            # Redirect to root explicitly after successful login
+            return redirect("/")
         else:
             error = 'Invalid Credentials. Please try again.'
             
-    login_page_content = files.read_file("webui/login.html")
-    return render_template_string(login_page_content, error=error)
-
-@webapp.route("/logout")
-async def logout_handler():
-    session.pop('authentication', None)
-    return redirect(url_for('login_handler'))
-
-# handle default address, load index
-@webapp.route("/", methods=["GET"])
-@requires_auth
-async def serve_index():
+    # For GET requests or failed POST, serve the main index WITHOUT auth requirement
+    # This prevents the infinite redirect loop
     gitinfo = None
     try:
         gitinfo = git.get_git_info()
@@ -185,6 +199,43 @@ async def serve_index():
         version_no=gitinfo["version"],
         version_time=gitinfo["commit_time"]
     )
+    
+    if error:
+        # Inject error into a global variable for React to read
+        error_script = f"<script>window.LOGIN_ERROR = {repr(error)};</script>"
+        index = index.replace("</head>", f"{error_script}</head>")
+        
+    return index
+
+@webapp.route("/logout")
+async def logout_handler():
+    session.pop('authentication', None)
+    return redirect(url_for('login_handler'))
+
+# handle default address, load index
+@webapp.route("/", methods=["GET"])
+@requires_auth
+async def serve_index(error=None):
+    gitinfo = None
+    try:
+        gitinfo = git.get_git_info()
+    except Exception:
+        gitinfo = {
+            "version": "unknown",
+            "commit_time": "unknown",
+        }
+    index = files.read_file("webui/index.html")
+    index = files.replace_placeholders_text(
+        _content=index,
+        version_no=gitinfo["version"],
+        version_time=gitinfo["commit_time"]
+    )
+    
+    if error:
+        # Inject error into a global variable for React to read
+        error_script = f"<script>window.LOGIN_ERROR = {repr(error)};</script>"
+        index = index.replace("</head>", f"{error_script}</head>")
+        
     return index
 
 def run():
