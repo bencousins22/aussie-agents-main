@@ -3,7 +3,7 @@
 import type { PollResponse } from "./types";
 
 // Get API base URL and API key from environment variables
-const API_BASE_URL = import.meta.env.VITE_API_URL || '';
+const API_BASE_URL = import.meta.env.VITE_NEXT_PUBLIC_API_URL || '';
 const API_KEY = import.meta.env.VITE_API_KEY || '';
 
 export async function fetchApi(url: string, init?: RequestInit): Promise<Response> {

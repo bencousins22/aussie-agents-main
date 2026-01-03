@@ -7,6 +7,34 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+## Connecting to a Backend
+
+This application is designed to connect to a backend API, making it easy to deploy with services like Vercel and connect to a backend hosted in a Docker container and exposed via ngrok.
+
+### Local Development
+
+For local development, you'll need a `.env` file. Copy the example file to get started:
+
+```bash
+cp .env.example .env
+```
+
+Open the `.env` file and change `VITE_NEXT_PUBLIC_API_URL` to point to your local backend server, typically `http://localhost:8000`.
+
+### Vercel Deployment with Ngrok
+
+This project is ready for Vercel integration.
+
+1.  **Get your Ngrok URL:** Make sure your backend Docker container is running and the ngrok tunnel is active. You will have a public URL similar to `https://<your-id>.ngrok-free.app`.
+
+2.  **Set Environment Variable in Vercel:** In your Vercel project settings, go to **Settings > Environment Variables**. Add the following variable:
+    -   **Name:** `VITE_NEXT_PUBLIC_API_URL`
+    -   **Value:** Your active ngrok URL (e.g., `https://b0f4a2792304.ngrok-free.app`)
+
+3.  **Deploy:** With the environment variable set, Vercel will build your frontend and automatically connect it to your backend service.
+
+Your frontend will now make API calls to the specified ngrok URL.
+
 ## React Compiler
 
 The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
