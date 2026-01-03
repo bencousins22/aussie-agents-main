@@ -3,7 +3,6 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
@@ -38,7 +37,7 @@ export default defineConfig({
         navigateFallback: '/index.html',
         runtimeCaching: [
           {
-            urlPattern: ({ url }) => url.pathname.startsWith('/public/'),
+            urlPattern: ({ url }: { url: URL }) => url.pathname.startsWith('/public/'),
             handler: 'CacheFirst',
             options: {
               cacheName: 'az-public-assets',
@@ -53,43 +52,9 @@ export default defineConfig({
     }),
   ],
   server: {
-    allowedHosts: ['ded8067776d4e6c2-161-38-217-69.serveousercontent.com', '*.serveousercontent.com', '*.serveo.net', '*.localhost.run'],
-    proxy: {
-      // Proxy Aussie Agents API endpoints to local backend during dev.
-      '^/(poll|message_async|message|settings_.*|csrf_token|health|projects|history_.*|upload_.*|upload|download_.*|get_work_dir_files|delete_work_dir_file|file_info|memory_dashboard|chat_.*|scheduler_.*|backup_.*|mcp_.*|notifications_.*|nudge|pause|restart|tunnel.*)$': {
-        target: 'http://localhost:50080',
-        changeOrigin: true,
-        secure: false,
-        cookieDomainRewrite: "",
-        configure: (
-          _proxy
-        ) => {
-          _proxy.on(
-            'error',
-            (err) => {
-            console.log('proxy error', err);
-          });
-          _proxy.on('proxyReq', (proxyReq, req) => {
-          _proxy.on('proxyReq', (_proxyReq, req) => {
-            console.log('Sending Request to the Target:', req.method, req.url);
-          });
-          _proxy.on('proxyRes', (proxyRes, req) => {
-            console.log('Received Response from the Target:', proxyRes.statusCode, req.url);
-          });
-        },
-      },
-      // Also proxy any API handler endpoints that are served at the root.
-      '^/(a2a|mcp)(/.*)?$': {
-        target: 'http://localhost:50080',
-        changeOrigin: true,
-        secure: false,
-      },
-      // Serve legacy assets during dev if needed.
-      '^/public/.*': {
-        target: 'http://localhost:50080',
-        changeOrigin: true,
-        secure: false,
-      },
-    },
+    port: 5173,
+    host: true,
+    strictPort: false,
+    cors: true,
   },
 })

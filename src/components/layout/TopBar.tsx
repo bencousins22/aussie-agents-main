@@ -134,7 +134,7 @@ export function TopBar({
         {/* Project selector */}
         <Button
           variant="primary"
-          size="xs"
+          size="sm"
           onClick={onOpenProjects}
           rightIcon={<ChevronDown className="size-3.5 opacity-70" />}
           aria-label="Select project"

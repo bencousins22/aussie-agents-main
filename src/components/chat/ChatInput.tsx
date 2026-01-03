@@ -66,21 +66,57 @@ export function ChatInput({
     maxSize: 100 * 1024 * 1024, // 100MB
   });
 
-  // Auto-resize textarea
-  useEffect(() => {
+  // Debounced textarea resize
+  const resizeTimeoutRef = useRef<number | null>(null);
+  const handleResize = useCallback(() => {
     if (inputRef.current) {
-      inputRef.current.style.height = "auto";
-      inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 250)}px`;
+      // Clear any pending resize
+      if (resizeTimeoutRef.current) {
+        clearTimeout(resizeTimeoutRef.current);
+      }
+      
+      // Debounce the resize operation
+      resizeTimeoutRef.current = window.setTimeout(() => {
+        if (inputRef.current) {
+          inputRef.current.style.height = "auto";
+          inputRef.current.style.height = `${Math.min(inputRef.current.scrollHeight, 250)}px`;
+        }
+      }, 16); // ~60fps
     }
-  }, [text]);
+  }, []);
 
-  // React 19 Form Action
+  // Auto-resize textarea with debouncing
+  useEffect(() => {
+    handleResize();
+    
+    return () => {
+      if (resizeTimeoutRef.current) {
+        window.clearTimeout(resizeTimeoutRef.current);
+      }
+    };
+  }, [text, handleResize]);
+
+  // React 19 Form Action with optimized submission
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [_state, formAction] = useActionState(async () => {
-    if (disabled || (!text.trim() && files.length === 0)) return;
-    await onSubmit(text.trim(), files);
-    setText("");
-    setFiles([]);
+  const [_state, formAction] = useActionState(async (prevState: unknown, formData: FormData) => {
+    if (disabled) return prevState;
+    
+    const message = formData.get("message") as string;
+    const messageText = message?.trim() || "";
+    
+    if (!messageText && files.length === 0) return prevState;
+    
+    try {
+      // Use startTransition to defer state updates
+      startTransition(() => {
+        onSubmit(messageText, files);
+        setText("");
+        setFiles([]);
+      });
+    } catch (error) {
+      console.error("Submission failed:", error);
+    }
+    
     return null;
   }, null);
 
@@ -100,33 +136,45 @@ export function ChatInput({
     }
   }, [activeContext, disabled]);
 
-  const handleImportKnowledge = useCallback(async () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.multiple = true;
-    input.onchange = async (e) => {
-      const filesInput = (e.target as HTMLInputElement).files;
-      if (!filesInput?.length) return;
-      try {
-        await agentZeroApi.uploadWorkDirFiles({
-          path: "/knowledge",
-          files: Array.from(filesInput),
-        });
-      } catch (e) {
-        console.error("Failed to import knowledge:", e);
-      }
-    };
-    input.click();
-  }, []);
+  const handleImportKnowledge = useCallback(() => {
+    if (disabled) return;
+    
+    startTransition(() => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.multiple = true;
+      input.onchange = async (e) => {
+        const filesInput = (e.target as HTMLInputElement).files;
+        if (!filesInput?.length) return;
+        
+        // Use setTimeout to defer the expensive operation
+        setTimeout(async () => {
+          try {
+            await agentZeroApi.uploadWorkDirFiles({
+              path: "/knowledge",
+              files: Array.from(filesInput),
+            });
+          } catch (e) {
+            console.error("Failed to import knowledge:", e);
+          }
+        }, 0);
+      };
+      input.click();
+    });
+  }, [disabled]);
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+      startTransition(() => {
+        setFiles((prev) => [...prev, ...Array.from(e.target.files!)]);
+      });
     }
   }, []);
 
   const removeFile = useCallback((index: number) => {
-    setFiles((prev) => prev.filter((_, idx) => idx !== index));
+    startTransition(() => {
+      setFiles((prev) => prev.filter((_, idx) => idx !== index));
+    });
   }, []);
 
   return (
@@ -160,7 +208,7 @@ export function ChatInput({
               role="status"
             >
               <div className="size-1.5 rounded-full bg-white/10" aria-hidden="true" />
-              <span>{connected ? "Ready" : "Disconnected"}</span>
+              <span>{connected ? "Ready" : "Backend Offline"}</span>
             </div>
           )}
 

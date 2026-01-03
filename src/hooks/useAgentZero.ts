@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState, useOptimistic } from "react";
-import { poll, sendMessageAsync } from "../lib/api";
+import { agentZeroApi } from "../lib/agentZeroApi";
 import type { AgentLogEntry, AgentNotification, AgentTaskSummary, AgentContextSummary } from "../lib/types";
 
 type OptimisticMessage = {
@@ -7,6 +7,13 @@ type OptimisticMessage = {
   text: string;
   createdAt: number;
 };
+
+const POLL_INTERVALS = {
+  ACTIVE: 500,
+  MIN_BACKOFF: 1000,
+  MAX_BACKOFF: 30000,
+  BACKOFF_MULTIPLIER: 1.5,
+} as const;
 
 export function useAgentZero() {
   const [connected, setConnected] = useState(false);
@@ -44,6 +51,8 @@ export function useAgentZero() {
 
   const pollInFlight = useRef(false);
   const stopped = useRef(false);
+  const currentBackoff = useRef(POLL_INTERVALS.ACTIVE);
+  const consecutiveErrors = useRef(0);
 
   const mergedLogs = useMemo(() => {
     const realLogs = logs.filter(Boolean);
@@ -96,13 +105,15 @@ export function useAgentZero() {
     pollInFlight.current = true;
 
     try {
-      const res = await poll({
+      const res = await agentZeroApi.poll({
         context: activeContext,
         logFrom: logVersion,
         notificationsFrom: notificationsVersion,
       });
 
       setConnected(true);
+      consecutiveErrors.current = 0;
+      currentBackoff.current = POLL_INTERVALS.ACTIVE;
 
       if (res.deselect_chat) {
         setActiveContext(null);
@@ -117,10 +128,9 @@ export function useAgentZero() {
 
       setNotificationsVersion(res.notifications_version || 0);
       if (Array.isArray(res.notifications) && res.notifications.length > 0) {
-        setNotifications((prev) => [...prev, ...res.notifications]);
+        setNotifications((prev) => [...prev, ...(res.notifications || [])]);
       }
 
-      // If chat switched/reset, clear log buffer.
       const nextGuid = res.log_guid || "";
       if (nextGuid && logGuid && nextGuid !== logGuid) {
         const base = Array.isArray(res.logs) ? res.logs : [];
@@ -138,12 +148,24 @@ export function useAgentZero() {
         setLogVersion(res.log_version || 0);
       }
 
-      // Ensure we have an active context when backend selects one.
       if (res.context && res.context !== "") {
         setActiveContext(res.context);
       }
-    } catch {
+    } catch (error) {
       setConnected(false);
+      consecutiveErrors.current += 1;
+
+      currentBackoff.current = Math.min(
+        POLL_INTERVALS.MIN_BACKOFF * Math.pow(POLL_INTERVALS.BACKOFF_MULTIPLIER, consecutiveErrors.current),
+        POLL_INTERVALS.MAX_BACKOFF
+      ) as 500;
+
+      if (consecutiveErrors.current === 1 || consecutiveErrors.current % 10 === 0) {
+        console.warn(
+          `Backend connection failed (${consecutiveErrors.current} consecutive errors) - retrying in ${Math.round(currentBackoff.current / 1000)}s`,
+          error
+        );
+      }
     } finally {
       pollInFlight.current = false;
     }
@@ -152,26 +174,25 @@ export function useAgentZero() {
   useEffect(() => {
     stopped.current = false;
 
-    let timeout: number | undefined;
-    let backoffMs = 500;
+    let timeoutId: number | undefined;
 
     const tick = async () => {
       if (stopped.current) return;
 
       await doPoll();
 
-      // basic backoff when disconnected
-      backoffMs = connected ? 500 : Math.min(backoffMs * 2, 5000);
-      timeout = window.setTimeout(tick, backoffMs);
+      if (!stopped.current) {
+        timeoutId = window.setTimeout(tick, currentBackoff.current);
+      }
     };
 
     tick();
 
     return () => {
       stopped.current = true;
-      if (timeout) window.clearTimeout(timeout);
+      if (timeoutId) window.clearTimeout(timeoutId);
     };
-  }, [doPoll, connected]);
+  }, [doPoll]);
 
   const sendMessage = useCallback(
     async (args: { text: string; attachments: File[] }) => {
@@ -187,7 +208,7 @@ export function useAgentZero() {
       
       addOptimisticLog(optimisticMessage);
 
-      const res = await sendMessageAsync({
+      const res = await agentZeroApi.sendMessageAsync({
         context: activeContext,
         messageId,
         text,
@@ -198,8 +219,7 @@ export function useAgentZero() {
         setActiveContext(res.context);
       }
 
-      // Trigger immediate poll after sending to speed up UI response
-      doPoll();
+      await doPoll();
     },
     [activeContext, addOptimisticLog, doPoll]
   );

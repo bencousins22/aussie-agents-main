@@ -1,4 +1,4 @@
-import { useState, useEffect, memo, useCallback } from "react";
+import { useState, useEffect, memo, useCallback, useMemo, useTransition } from "react";
 import { ChevronDown, ChevronUp, Maximize2, X } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -21,6 +21,7 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
   const [expanded, setExpanded] = useState(true);
   const [fullscreen, setFullscreen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [_, startTransition] = useTransition();
 
   // Handle escape key to close fullscreen
   useEffect(() => {
@@ -52,8 +53,37 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
 
   const toggleExpanded = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
-    setExpanded(!expanded);
-  }, [expanded]);
+    startTransition(() => {
+      setExpanded(prev => !prev);
+    });
+  }, []);
+
+  // Memoize markdown components to prevent recreation on every render
+  const markdownComponents = useMemo(() => ({
+    code({ inline, className, children, ...props }: MarkdownCodeProps) {
+      const match = /language-(\w+)/.exec(className || "");
+      return !inline && match ? (
+        <CodeBlock language={match[1]}>{String(children).replace(/\n$/, "")}</CodeBlock>
+      ) : (
+        <code
+          className={cn("bg-black/40 px-1.5 py-0.5 rounded text-emerald-400 font-mono text-[0.9em]", className)}
+          {...props}
+        >
+          {children}
+        </code>
+      );
+    },
+  }), []);
+
+  // Memoize markdown content to prevent re-parsing
+  const markdownContent = useMemo(() => (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={markdownComponents}
+    >
+      {content}
+    </ReactMarkdown>
+  ), [content, markdownComponents]);
 
   const openFullscreen = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -123,23 +153,7 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
             {/* Modal Content */}
             <div className="flex-1 overflow-auto p-6">
               <div className="prose prose-invert prose-lg max-w-none">
-                <ReactMarkdown
-                  remarkPlugins={[remarkGfm]}
-                  components={{
-                    code({ inline, className, children, ...props }: MarkdownCodeProps) {
-                      const match = /language-(\w+)/.exec(className || "");
-                      return !inline && match ? (
-                        <CodeBlock language={match[1]}>{String(children).replace(/\n$/, "")}</CodeBlock>
-                      ) : (
-                        <code className={className} {...props}>
-                          {children}
-                        </code>
-                      );
-                    },
-                  }}
-                >
-                  {content}
-                </ReactMarkdown>
+                {markdownContent}
               </div>
             </div>
           </div>
@@ -219,26 +233,7 @@ export const ResponseBlock = memo(function ResponseBlock({ log }: ResponseBlockP
             )}
           >
             <div className="prose prose-invert prose-emerald max-w-none prose-p:leading-[1.8] prose-headings:tracking-tight prose-pre:bg-transparent prose-pre:p-0 prose-sm md:prose-base text-white/90">
-            <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                components={{
-                  code({ inline, className, children, ...props }: MarkdownCodeProps) {
-                    const match = /language-(\w+)/.exec(className || "");
-                    return !inline && match ? (
-                      <CodeBlock language={match[1]}>{String(children).replace(/\n$/, "")}</CodeBlock>
-                    ) : (
-                      <code
-                        className={cn("bg-black/40 px-1.5 py-0.5 rounded text-emerald-400 font-mono text-[0.9em]", className)}
-                        {...props}
-                      >
-                        {children}
-                      </code>
-                    );
-                  },
-                }}
-              >
-                {content}
-              </ReactMarkdown>
+              {markdownContent}
             </div>
           </div>
         )}

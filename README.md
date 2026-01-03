@@ -1,101 +1,162 @@
-# React + TypeScript + Vite
+# Aussie Agents - React Frontend for Agent Zero
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern React + TypeScript frontend for Agent Zero Docker backend, built with Vite for optimal performance.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ⚡️ **Fast Development** with Vite HMR
+- 🎨 **Modern UI** with Tailwind CSS v4
+- 📱 **PWA Support** for mobile devices
+- 🔄 **Real-time Updates** via polling
+- 🎯 **TypeScript** for type safety
+- 🧩 **Modular Architecture** with clean separation of concerns
 
-## Connecting to a Backend
+## Prerequisites
 
-This application is designed to connect to a backend API, making it easy to deploy with services like Vercel and connect to a backend hosted in a Docker container and exposed via ngrok.
+- Node.js 18+ (or compatible runtime)
+- Agent Zero Docker backend running on port 50001
 
-### Local Development
+## Quick Start
 
-For local development, you'll need a `.env` file. Copy the example file to get started:
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure Environment
+
+Copy the example environment file:
 
 ```bash
 cp .env.example .env
 ```
 
-Open the `.env` file and change `VITE_NEXT_PUBLIC_API_URL` to point to your local backend server, typically `http://localhost:8000`.
+Edit `.env` and set your Agent Zero backend URL:
 
-### Vercel Deployment with Ngrok
+```env
+# For local Docker backend
+VITE_API_URL=http://localhost:50001
 
-This project is ready for Vercel integration.
+# For remote/ngrok backend
+# VITE_API_URL=https://your-ngrok-url.ngrok-free.app
 
-1.  **Get your Ngrok URL:** Make sure your backend Docker container is running and the ngrok tunnel is active. You will have a public URL similar to `https://<your-id>.ngrok-free.app`.
-
-2.  **Set Environment Variable in Vercel:** In your Vercel project settings, go to **Settings > Environment Variables**. Add the following variable:
-    -   **Name:** `VITE_NEXT_PUBLIC_API_URL`
-    -   **Value:** Your active ngrok URL (e.g., `https://b0f4a2792304.ngrok-free.app`)
-
-3.  **Deploy:** With the environment variable set, Vercel will build your frontend and automatically connect it to your backend service.
-
-Your frontend will now make API calls to the specified ngrok URL.
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Optional: API Key if your backend requires authentication
+VITE_API_KEY=your-api-key-here
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 3. Start Development Server
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm run dev
 ```
+
+The application will be available at `http://localhost:5173`
+
+## Agent Zero Docker Backend Setup
+
+
+This frontend connects to the Agent Zero Docker backend. Make sure it's running before starting the frontend.
+
+### Start Agent Zero Backend
+
+```bash
+# Navigate to your Agent Zero Docker directory
+cd /path/to/agent-zero/docker/run
+
+# Start the backend
+docker-compose up -d
+
+# Verify it's running
+curl http://localhost:50001/health
+```
+
+### CORS Configuration
+
+Agent Zero Docker backend should have CORS enabled. Ensure your backend configuration includes:
+
+```yaml
+environment:
+  - CORS_ORIGINS=http://localhost:5173,https://your-production-domain.com
+```
+
+## Project Structure
+
+```
+src/
+├── components/       # React components
+│   ├── auth/        # Authentication components
+│   ├── chat/        # Chat interface components
+│   ├── features/    # Feature-specific components
+│   ├── layout/      # Layout components
+│   ├── modals/      # Modal dialogs
+│   ├── ui/          # Reusable UI components
+│   └── visuals/     # Visual effects
+├── hooks/           # Custom React hooks
+│   ├── useAgentZero.ts    # Main Agent Zero integration hook
+│   └── ...
+├── lib/             # Core libraries
+│   ├── api.ts              # API client with error handling
+│   ├── agentZeroApi.ts     # Agent Zero API methods
+│   ├── schemas.ts          # Zod validation schemas
+│   └── types.ts            # TypeScript types
+└── styles/          # Global styles
+```
+
+## Building for Production
+
+
+```bash
+npm run build
+```
+
+Build output will be in the `dist/` directory.
+
+### Preview Production Build
+
+```bash
+npm run preview
+```
+
+## Deployment Options
+
+### Option 1: Vercel (Recommended)
+
+1. Push your code to GitHub
+2. Import repository to Vercel
+3. Add environment variables in Vercel dashboard:
+   - `VITE_API_URL`: Your Agent Zero backend URL
+   - `VITE_API_KEY`: Your API key (if required)
+4. Deploy
+
+### Option 2: Static Hosting (Netlify, Cloudflare Pages, etc.)
+
+1. Build the project: `npm run build`
+2. Deploy the `dist/` directory
+3. Configure environment variables in your hosting provider
+4. Ensure backend URL is accessible from your deployment
+
+### Option 3: Docker
+
+```dockerfile
+FROM node:18-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+```
+
+## API Integration
+
+The frontend communicates with Agent Zero backend through:
+
+- **Polling**: Real-time updates with exponential backoff
+- **WebSocket**: (Future enhancement)
+- **REST API**: Standard HTTP requests for actions
+

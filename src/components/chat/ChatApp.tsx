@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, lazy, Suspense, useCallback } from "react";
+import { useEffect, useMemo, useRef, useState, lazy, Suspense, useCallback, Fragment } from "react";
 
 import { useAgentZero } from "../../hooks/useAgentZero";
 import { usePreferences } from "../../hooks/usePreferences";
@@ -297,20 +297,6 @@ export function ChatApp() {
                   Aussie Agents
                 </p>
                 <p className="text-xs sm:text-sm text-white/40 mb-4 sm:mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
-                <div className="flex items-center justify-center gap-2 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
-                <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
-                  AA
-                </div>
-                <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
-                  Aussie Agents
-                </p>
-                <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
-                  AA
-                </div>
-                <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
-                  Aussie Agents
-                </p>
-                <p className="text-sm text-white/40 hidden sm:block mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
                 <div className="flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
                   <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                   <span>System Online</span>
@@ -319,23 +305,25 @@ export function ChatApp() {
               </div>
             </div>
           ) : (
-            visibleMessages.map((m) => {
-              const key = String(m.id ?? m.no ?? `${m.type}-${m.heading}-${m.content}`);
-              
-              if (isUserLog(m)) {
-                return <UserMessage key={key} log={m} />;
-              }
-              if (isResponseLog(m)) {
-                return <ResponseBlock key={key} log={m} />;
-              }
-              if (isToolLikeLog(m)) {
-                return <ToolWidget key={key} log={m} />;
-              }
-              if (isThinkingLog(m)) {
-                return <ThinkingWidget key={key} log={m} />;
-              }
-              return null;
-            })
+            <Fragment>
+              {visibleMessages.map((m) => {
+                const key = String(m.id ?? m.no ?? `${m.type}-${m.heading}-${m.content}`);
+                
+                if (isUserLog(m)) {
+                  return <UserMessage key={key} log={m} />;
+                }
+                if (isResponseLog(m)) {
+                  return <ResponseBlock key={key} log={m} />;
+                }
+                if (isToolLikeLog(m)) {
+                  return <ToolWidget key={key} log={m} />;
+                }
+                if (isThinkingLog(m)) {
+                  return <ThinkingWidget key={key} log={m} />;
+                }
+                return null;
+              })}
+            </Fragment>
           )}
           <div ref={bottomRef} />
         </section>
@@ -410,7 +398,6 @@ export function ChatApp() {
       {/* Search Modal */}
       {searchOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 p-3">
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-3 sm:p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setSearchOpen(false)}
@@ -425,31 +412,16 @@ export function ChatApp() {
               <button
                 onClick={() => setSearchOpen(false)}
                 className="size-7 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
-            className="relative w-full max-w-xl bg-zinc-900 rounded-2xl border border-zinc-800 shadow-2xl"
-            onMouseDown={(e) => e.stopPropagation()}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="p-3 sm:p-4 border-b border-zinc-800 flex items-center justify-between">
-              <h3 className="text-xs sm:text-sm font-semibold text-white">Search Chat History</h3>
-              <button
-                onClick={() => setSearchOpen(false)}
-                className="size-7 sm:size-8 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
               >
                 <X className="size-4" />
               </button>
             </div>
             <div className="p-3">
-            <div className="p-3 sm:p-4">
               <input
                 type="text"
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2 rounded-md border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
-                autoFocus
-                autoComplete="off"
-              />
-              <div className="mt-2 text-[10px] text-white/80">
                 className="w-full px-3 py-2.5 sm:py-2 rounded-lg border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
                 autoFocus
                 autoComplete="off"

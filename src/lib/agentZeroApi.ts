@@ -1,6 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import { callJsonApi, fetchApi } from "./api";
+import type { AgentLogEntry } from "./types";
 
 export type ApiOk<T> = { ok: true } & T;
 export type ApiErr = { ok?: false; success?: false; error: string };
@@ -15,7 +14,7 @@ export type SettingsField = {
   title: string;
   description?: string;
   type: "text" | "number" | "select" | "range" | "textarea" | "password" | "switch" | "button" | "html";
-  value: any;
+  value: unknown;
   min?: number;
   max?: number;
   step?: number;
@@ -39,50 +38,50 @@ export type SettingsOutput = {
 export type SettingsGetResponse = { settings: SettingsOutput };
 export type SettingsSetResponse = { settings: SettingsOutput };
 
-export type HealthResponse = { gitinfo: any; error: string | null };
+export type HealthResponse = { gitinfo: unknown; error: string | null };
 
 export type SchedulerTasksListResponse =
-  | { ok: true; tasks: any[] }
-  | { ok: false; error: string; tasks: any[] };
+  | { ok: true; tasks: unknown[] }
+  | { ok: false; error: string; tasks: unknown[] };
 
-export type SchedulerTaskResponse = { ok: true; task: any } | { ok: false; error: string };
+export type SchedulerTaskResponse = { ok: true; task: unknown } | { ok: false; error: string };
 
 export type BackupDefaultsResponse =
-  | { success: true; default_patterns: { include_patterns: string[]; exclude_patterns: string[] }; metadata: any }
+  | { success: true; default_patterns: { include_patterns: string[]; exclude_patterns: string[] }; metadata: unknown }
   | { success: false; error: string };
 
 export type BackupInspectResponse =
-  | { success: true; metadata: any; files: any[]; include_patterns: string[]; exclude_patterns: string[]; [k: string]: any }
+  | { success: true; metadata: unknown; files: unknown[]; include_patterns: string[]; exclude_patterns: string[]; [k: string]: unknown }
   | { success: false; error: string };
 
 export type BackupRestorePreviewResponse =
-  | { success: true; files: any[]; files_to_delete?: any[]; files_to_restore?: any[]; skipped_files: any[]; [k: string]: any }
+  | { success: true; files: unknown[]; files_to_delete?: unknown[]; files_to_restore?: unknown[]; skipped_files: unknown[]; [k: string]: unknown }
   | { success: false; error: string };
 
 export type BackupRestoreResponse =
-  | { success: true; restored_files: any[]; deleted_files?: any[]; skipped_files: any[]; errors: any[]; backup_metadata: any; [k: string]: any }
+  | { success: true; restored_files: unknown[]; deleted_files?: unknown[]; skipped_files: unknown[]; errors: unknown[]; backup_metadata: unknown; [k: string]: unknown }
   | { success: false; error: string };
 
-export type ProjectsResponse = { ok: boolean; data?: any; error?: string };
+export type ProjectsResponse = { ok: boolean; data?: unknown; error?: string };
 
 export type MemoryDashboardResponse =
-  | { success: true; [k: string]: any }
-  | { success: false; error: string; memories?: any[]; total_count?: number };
+  | { success: true; [k: string]: unknown }
+  | { success: false; error: string; memories?: unknown[]; total_count?: number };
 
-export type NotificationsHistoryResponse = { notifications: any[]; guid: string; count: number };
+export type NotificationsHistoryResponse = { notifications: unknown[]; guid: string; count: number };
 
 export type NotificationsClearResponse = { success: boolean; message?: string; error?: string };
 
 export type UploadWorkDirFilesResponse = {
   message: string;
-  data: any;
+  data: unknown;
   successful: string[];
   failed: string[];
 };
 
-export type DeleteWorkDirFileResponse = { data: any };
+export type DeleteWorkDirFileResponse = { data: unknown };
 
-export type GetWorkDirFilesResponse = { data: any };
+export type GetWorkDirFilesResponse = { data: unknown };
 
 export type FileInfoResponse = {
   input_path: string;
@@ -104,12 +103,12 @@ export type FileInfoResponse = {
 export type ChatCreateResponse = { ok: true; ctxid: string; message: string };
 export type ChatResetResponse = { message: string };
 export type ChatRemoveResponse = { message: string };
-export type ChatExportResponse = { message: string; ctxid: string; content: any };
+export type ChatExportResponse = { message: string; ctxid: string; content: unknown };
 export type ChatLoadResponse = { message: string; ctxids: string[] };
 export type ChatFilesPathResponse = { ok: boolean; path?: string; error?: string };
 
-export type McpServersStatusResponse = { success: boolean; status?: any; error?: string };
-export type McpServersApplyResponse = { success: boolean; status?: any; error?: string };
+export type McpServersStatusResponse = { success: boolean; status?: unknown; error?: string };
+export type McpServersApplyResponse = { success: boolean; status?: unknown; error?: string };
 
 export type PauseResponse = { success?: boolean; paused?: boolean; message?: string; error?: string };
 export type NudgeResponse = { success?: boolean; message?: string; error?: string };
@@ -126,21 +125,30 @@ export type TunnelStatusResponse = {
 export type PollResponse = {
   messages?: Array<{ content: string; role: string; timestamp: number }>;
   log?: string[];
-  notifications?: any[];
+  logs?: AgentLogEntry[];
+  notifications?: unknown[];
+  deselect_chat?: boolean;
+  contexts?: unknown[];
+  tasks?: unknown[];
+  log_progress?: number;
+  log_progress_active?: boolean;
+  paused?: boolean;
+  notifications_version?: number;
+  log_guid?: string;
+  log_version?: number;
+  context?: string;
   error?: string;
 };
 
 export const agentZeroApi = {
-  // Health check
   health(): Promise<HealthResponse> {
     return callJsonApi<HealthResponse>("/health", null);
   },
 
-  // Chat operations
   chatCreate(args: { current_context?: string; new_context?: string }): Promise<ChatCreateResponse> {
     return callJsonApi<ChatCreateResponse>("/chat_create", {
       current_context: args.current_context || "",
-      new_context: args.new_context || undefined,
+      new_context: args.new_context,
     });
   },
 
@@ -156,7 +164,7 @@ export const agentZeroApi = {
     return callJsonApi<ChatExportResponse>("/chat_export", { ctxid });
   },
 
-  chatLoad(chats: any[]): Promise<ChatLoadResponse> {
+  chatLoad(chats: unknown[]): Promise<ChatLoadResponse> {
     return callJsonApi<ChatLoadResponse>("/chat_load", { chats });
   },
 
@@ -164,56 +172,16 @@ export const agentZeroApi = {
     return callJsonApi<ChatFilesPathResponse>("/chat_files_path_get", { ctxid });
   },
 
-  // Message operations
   async sendMessageAsync(args: {
     context: string | null;
     messageId: string;
     text: string;
     attachments: File[];
   }): Promise<{ message: string; context: string }> {
-    if (args.attachments.length > 0) {
-      const formData = new FormData();
-      formData.append("text", args.text);
-      formData.append("context", args.context || "");
-      formData.append("message_id", args.messageId);
-      for (const file of args.attachments) {
-        formData.append("attachments", file);
-      }
-
-      const res = await fetchApi("/message_async", {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!res.ok) {
-        const err = await res.text();
-        throw new Error(err);
-      }
-
-      return (await res.json()) as { message: string; context: string };
-    }
-
-    const res = await fetchApi("/message_async", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        text: args.text,
-        context: args.context,
-        message_id: args.messageId,
-      }),
-    });
-
-    if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err);
-    }
-
-    return (await res.json()) as { message: string; context: string };
+    const { sendMessageAsync } = await import("./api");
+    return sendMessageAsync(args);
   },
 
-  // Poll for responses
   poll(args: {
     context: string | null;
     logFrom: number;
@@ -228,26 +196,24 @@ export const agentZeroApi = {
     });
   },
 
-  // Settings
   settingsGet(): Promise<SettingsGetResponse> {
-    return fetchApi("/settings_get", { method: "GET" }).then(async (r) => (await r.json()) as SettingsGetResponse);
+    return fetchApi("/settings_get", { method: "GET" }).then(
+      async (r) => (await r.json()) as SettingsGetResponse
+    );
   },
 
-  settingsSet(settingsPayload: any): Promise<SettingsSetResponse> {
+  settingsSet(settingsPayload: unknown): Promise<SettingsSetResponse> {
     return callJsonApi<SettingsSetResponse>("/settings_set", settingsPayload);
   },
 
-  // Projects
-  projects(action: string, payload: Record<string, any> = {}): Promise<ProjectsResponse> {
+  projects(action: string, payload: Record<string, unknown> = {}): Promise<ProjectsResponse> {
     return callJsonApi<ProjectsResponse>("/projects", { action, ...payload });
   },
 
-  // Memory
-  memoryDashboard(action: string, payload: Record<string, any> = {}): Promise<MemoryDashboardResponse> {
+  memoryDashboard(action: string, payload: Record<string, unknown> = {}): Promise<MemoryDashboardResponse> {
     return callJsonApi<MemoryDashboardResponse>("/memory_dashboard", { action, ...payload });
   },
 
-  // Notifications
   notificationsHistory(): Promise<NotificationsHistoryResponse> {
     return callJsonApi<NotificationsHistoryResponse>("/notifications_history", null);
   },
@@ -256,32 +222,30 @@ export const agentZeroApi = {
     return callJsonApi<NotificationsClearResponse>("/notifications_clear", null);
   },
 
-  // Scheduler
   schedulerTasksList(timezone?: string): Promise<SchedulerTasksListResponse> {
     return callJsonApi<SchedulerTasksListResponse>("/scheduler_tasks_list", timezone ? { timezone } : {});
   },
 
-  schedulerTaskCreate(payload: any): Promise<SchedulerTaskResponse> {
+  schedulerTaskCreate(payload: unknown): Promise<SchedulerTaskResponse> {
     return callJsonApi<SchedulerTaskResponse>("/scheduler_task_create", payload);
   },
 
-  schedulerTaskUpdate(payload: any): Promise<any> {
-    return callJsonApi<any>("/scheduler_task_update", payload);
+  schedulerTaskUpdate(payload: unknown): Promise<unknown> {
+    return callJsonApi<unknown>("/scheduler_task_update", payload);
   },
 
-  schedulerTaskDelete(payload: any): Promise<any> {
-    return callJsonApi<any>("/scheduler_task_delete", payload);
+  schedulerTaskDelete(payload: unknown): Promise<unknown> {
+    return callJsonApi<unknown>("/scheduler_task_delete", payload);
   },
 
-  schedulerTaskRun(payload: any): Promise<any> {
-    return callJsonApi<any>("/scheduler_task_run", payload);
+  schedulerTaskRun(payload: unknown): Promise<unknown> {
+    return callJsonApi<unknown>("/scheduler_task_run", payload);
   },
 
-  schedulerTick(payload: any): Promise<any> {
-    return callJsonApi<any>("/scheduler_tick", payload);
+  schedulerTick(payload: unknown): Promise<unknown> {
+    return callJsonApi<unknown>("/scheduler_tick", payload);
   },
 
-  // Backup
   backupGetDefaults(): Promise<BackupDefaultsResponse> {
     return callJsonApi<BackupDefaultsResponse>("/backup_get_defaults", null);
   },
@@ -299,8 +263,7 @@ export const agentZeroApi = {
     });
 
     if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err);
+      throw new Error(await res.text());
     }
 
     return await res.blob();
@@ -320,7 +283,7 @@ export const agentZeroApi = {
 
   async backupRestorePreview(args: {
     file: File;
-    metadata: any;
+    metadata: unknown;
     overwrite_policy?: "overwrite" | "skip" | "backup";
     clean_before_restore?: boolean;
   }): Promise<BackupRestorePreviewResponse> {
@@ -340,7 +303,7 @@ export const agentZeroApi = {
 
   async backupRestore(args: {
     file: File;
-    metadata: any;
+    metadata: unknown;
     overwrite_policy?: "overwrite" | "skip" | "backup";
     clean_before_restore?: boolean;
   }): Promise<BackupRestoreResponse> {
@@ -358,7 +321,6 @@ export const agentZeroApi = {
     return (await res.json()) as BackupRestoreResponse;
   },
 
-  // Work directory
   async getWorkDirFiles(path: string): Promise<GetWorkDirFilesResponse> {
     const url = new URL("/get_work_dir_files", window.location.origin);
     url.searchParams.set("path", path);
@@ -369,9 +331,7 @@ export const agentZeroApi = {
   async uploadWorkDirFiles(args: { path: string; files: File[] }): Promise<UploadWorkDirFilesResponse> {
     const formData = new FormData();
     formData.append("path", args.path);
-    for (const f of args.files) {
-      formData.append("files[]", f);
-    }
+    args.files.forEach(f => formData.append("files[]", f));
 
     const res = await fetchApi("/upload_work_dir_files", {
       method: "POST",
@@ -379,8 +339,7 @@ export const agentZeroApi = {
     });
 
     if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err);
+      throw new Error(await res.text());
     }
 
     return (await res.json()) as UploadWorkDirFilesResponse;
@@ -403,23 +362,20 @@ export const agentZeroApi = {
     const res = await fetchApi(url.toString(), { method: "GET" });
 
     if (!res.ok) {
-      const err = await res.text();
-      throw new Error(err);
+      throw new Error(await res.text());
     }
 
     return await res.blob();
   },
 
-  // MCP servers
   mcpServersStatus(): Promise<McpServersStatusResponse> {
     return callJsonApi<McpServersStatusResponse>("/mcp_servers_status", null);
   },
 
-  mcpServersApply(mcp_servers: any): Promise<McpServersApplyResponse> {
+  mcpServersApply(mcp_servers: unknown): Promise<McpServersApplyResponse> {
     return callJsonApi<McpServersApplyResponse>("/mcp_servers_apply", { mcp_servers });
   },
 
-  // Agent control
   pause(context: string, paused: boolean): Promise<PauseResponse> {
     return callJsonApi<PauseResponse>("/pause", { context, paused });
   },
@@ -432,12 +388,11 @@ export const agentZeroApi = {
     return callJsonApi<RestartResponse>("/restart", null);
   },
 
-  // Tunnel operations
   tunnelStatus(): Promise<TunnelStatusResponse> {
     return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "get" });
   },
 
-  tunnelCreate(provider: string = "serveo", port?: number): Promise<TunnelStatusResponse> {
+  tunnelCreate(provider = "serveo", port?: number): Promise<TunnelStatusResponse> {
     return callJsonApi<TunnelStatusResponse>("/tunnel_proxy", { action: "create", provider, port });
   },
 
