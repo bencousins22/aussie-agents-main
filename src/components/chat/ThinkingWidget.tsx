@@ -69,7 +69,7 @@ export const ThinkingWidget = memo(function ThinkingWidget({ log }: { log: Agent
 
         {hasDetails && (
           <div className="flex items-center gap-[var(--spacing-3)]">
-            <Badge variant="secondary" size="sm">
+            <Badge variant="outline" size="sm">
               Details
             </Badge>
             <div className="text-white/40">

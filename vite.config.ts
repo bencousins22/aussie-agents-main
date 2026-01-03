@@ -61,7 +61,6 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
         cookieDomainRewrite: "",
-        withCredentials: true,
         configure: (
           _proxy
         ) => {
@@ -71,6 +70,7 @@ export default defineConfig({
             console.log('proxy error', err);
           });
           _proxy.on('proxyReq', (proxyReq, req) => {
+          _proxy.on('proxyReq', (_proxyReq, req) => {
             console.log('Sending Request to the Target:', req.method, req.url);
           });
           _proxy.on('proxyRes', (proxyRes, req) => {

@@ -121,7 +121,7 @@ export const LoginPage: React.FC = () => {
             <div className="pt-4 sm:pt-6">
               <Button
                 type="submit"
-                variant="default"
+                variant="primary"
                 size="lg"
                 fullWidth
                 loading={isSubmitting}

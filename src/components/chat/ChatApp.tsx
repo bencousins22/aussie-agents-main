@@ -304,6 +304,12 @@ export function ChatApp() {
                 <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
                   Aussie Agents
                 </p>
+                <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
+                  AA
+                </div>
+                <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
+                  Aussie Agents
+                </p>
                 <p className="text-sm text-white/40 hidden sm:block mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
                 <div className="flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
                   <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
