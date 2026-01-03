@@ -242,7 +242,7 @@ export function ChatApp() {
     : undefined;
 
   return (
-    <div className="relative w-full h-screen overflow-hidden bg-background text-foreground flex">
+    <div className="relative w-full h-dvh overflow-hidden bg-background text-foreground flex">
       {/* React 19 Document Metadata */}
       <title>{docTitle}</title>
       <meta name="description" content="Aussie Agents specialized workforce interface." />
@@ -274,7 +274,7 @@ export function ChatApp() {
         />
 
         {/* Messages area */}
-        <section className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 no-scrollbar min-h-0">
+        <section className="flex-1 overflow-y-auto px-4 sm:px-6 py-5 sm:py-6 space-y-4 no-scrollbar min-h-0">
           {/* Typing indicator */}
           {isAgentProcessing && (
             <div className="flex items-center gap-3 px-4 py-3 mx-auto max-w-4xl">
@@ -290,17 +290,17 @@ export function ChatApp() {
           {visibleMessages.length === 0 ? (
             <div className="flex items-center justify-center h-full px-6">
               <div className="text-center text-white/50 max-w-lg">
-                <div className="size-24 sm:size-32 mx-auto mb-8 sm:mb-10 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-4xl sm:text-5xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
+                <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
                   AA
                 </div>
-                <p className="text-2xl sm:text-3xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-4 tracking-tighter">
+                <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
                   Aussie Agents
                 </p>
-                <p className="text-[15px] text-white/40 hidden sm:block mb-6 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
-                <div className="flex items-center justify-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
-                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                <p className="text-sm text-white/40 hidden sm:block mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
+                <div className="flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
+                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                   <span>System Online</span>
-                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]" />
+                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                 </div>
               </div>
             </div>
@@ -395,36 +395,36 @@ export function ChatApp() {
       
       {/* Search Modal */}
       {searchOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 p-4">
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-3 sm:p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setSearchOpen(false)}
           />
           <div
-            className="relative w-full max-w-2xl bg-zinc-900 rounded-2xl border border-zinc-800 shadow-2xl"
+            className="relative w-full max-w-xl bg-zinc-900 rounded-2xl border border-zinc-800 shadow-2xl"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 border-b border-zinc-800 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-white">Search Chat History</h3>
+            <div className="p-3 sm:p-4 border-b border-zinc-800 flex items-center justify-between">
+              <h3 className="text-xs sm:text-sm font-semibold text-white">Search Chat History</h3>
               <button
                 onClick={() => setSearchOpen(false)}
-                className="size-8 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
+                className="size-7 sm:size-8 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
               >
                 <X className="size-4" />
               </button>
             </div>
-            <div className="p-4">
+            <div className="p-3 sm:p-4">
               <input
                 type="text"
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
+                className="w-full px-3 py-2.5 sm:py-2 rounded-lg border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
                 autoFocus
                 autoComplete="off"
               />
-              <div className="mt-2 text-xs text-white/80">
+              <div className="mt-2 text-[11px] sm:text-xs text-white/80">
                 Found {visibleMessages.length} messages
               </div>
             </div>
