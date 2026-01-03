@@ -290,6 +290,20 @@ export function ChatApp() {
           {visibleMessages.length === 0 ? (
             <div className="flex items-center justify-center h-full px-4 sm:px-6">
               <div className="text-center text-white/50 max-w-lg">
+                <div className="size-20 sm:size-24 mx-auto mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-2xl sm:text-3xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
+                  AA
+                </div>
+                <p className="text-lg sm:text-xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tighter">
+                  Aussie Agents
+                </p>
+                <p className="text-xs sm:text-sm text-white/40 mb-4 sm:mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
+                <div className="flex items-center justify-center gap-2 text-[8px] sm:text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
+                <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
+                  AA
+                </div>
+                <p className="text-xl sm:text-2xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-3 tracking-tighter">
+                  Aussie Agents
+                </p>
                 <div className="size-20 sm:size-28 mx-auto mb-6 sm:mb-8 rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-3xl sm:text-4xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
                   AA
                 </div>
@@ -395,12 +409,22 @@ export function ChatApp() {
       
       {/* Search Modal */}
       {searchOpen && (
+        <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 p-3">
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-16 sm:pt-20 p-3 sm:p-4">
           <div
             className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setSearchOpen(false)}
           />
           <div
+            className="relative w-full max-w-lg bg-zinc-900 rounded-xl border border-zinc-800 shadow-2xl"
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-3 border-b border-zinc-800 flex items-center justify-between">
+              <h3 className="text-xs font-semibold text-white">Search Chat History</h3>
+              <button
+                onClick={() => setSearchOpen(false)}
+                className="size-7 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
             className="relative w-full max-w-xl bg-zinc-900 rounded-2xl border border-zinc-800 shadow-2xl"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
@@ -414,12 +438,18 @@ export function ChatApp() {
                 <X className="size-4" />
               </button>
             </div>
+            <div className="p-3">
             <div className="p-3 sm:p-4">
               <input
                 type="text"
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full px-3 py-2 rounded-md border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
+                autoFocus
+                autoComplete="off"
+              />
+              <div className="mt-2 text-[10px] text-white/80">
                 className="w-full px-3 py-2.5 sm:py-2 rounded-lg border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
                 autoFocus
                 autoComplete="off"
