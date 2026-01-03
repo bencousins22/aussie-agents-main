@@ -4,6 +4,12 @@ import { Input } from "../ui/Input";
 import { Button } from "../ui/Button";
 import { Card } from "../ui/Card";
 
+declare global {
+  interface Window {
+    LOGIN_ERROR: string | undefined;
+  }
+}
+
 export const LoginPage: React.FC = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -12,11 +18,11 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     // Read error from global variable injected by Flask
-    const globalError = (window as any).LOGIN_ERROR;
+    const globalError = window.LOGIN_ERROR;
     if (globalError) {
       setError(globalError);
       // Clear it so it doesn't persist on refresh
-      (window as any).LOGIN_ERROR = null;
+      window.LOGIN_ERROR = undefined;
     }
   }, []);
 

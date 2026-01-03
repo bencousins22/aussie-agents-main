@@ -209,7 +209,7 @@ export function ChatApp() {
       }
       return true;
     });
-  }, [logs, prefs.showThoughts, prefs.showUtils, searchQuery, isAgentProcessing]);
+  }, [logs, prefs.showThoughts, prefs.showUtils, searchQuery]);
 
   useEffect(() => {
     if (!prefs.autoScroll) return;
