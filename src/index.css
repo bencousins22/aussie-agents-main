@@ -108,7 +108,7 @@
     height: 100%;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
-    overflow: hidden;
+    overflow: auto;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -120,9 +120,10 @@
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-sans);
-    overflow: hidden;
+    overflow: auto;
     line-height: 1.6;
     letter-spacing: -0.011em;
+    -webkit-overflow-scrolling: touch;
   }
 }
 
