@@ -132,31 +132,31 @@ export function ChatInput({
   return (
     <div
       className={cn(
-        "w-full max-w-4xl mx-auto p-4 sm:p-6 bg-gradient-to-t from-black via-black/80 to-transparent transition-all duration-300",
+        "w-full max-w-4xl mx-auto p-2 sm:p-6 bg-gradient-to-t from-black via-black/80 to-transparent transition-all duration-300",
         disabled && "opacity-50 pointer-events-none grayscale-[0.5]"
       )}
       role="region"
       aria-label="Chat input and commands"
       {...dragHandlers}
     >
-      <div className="flex flex-col gap-4 relative">
+      <div className="flex flex-col gap-3 sm:gap-4 relative">
         {/* Drag Overlay */}
         {isDragging && (
-          <div className="absolute inset-0 z-50 bg-emerald-500/10 border-2 border-dashed border-emerald-500/40 rounded-[var(--radius-4xl)] backdrop-blur-sm flex items-center justify-center pointer-events-none animate-in fade-in duration-200">
+          <div className="absolute inset-0 z-50 bg-emerald-500/10 border-2 border-dashed border-emerald-500/40 rounded-2xl sm:rounded-[var(--radius-4xl)] backdrop-blur-sm flex items-center justify-center pointer-events-none animate-in fade-in duration-200">
             <div className="flex flex-col items-center gap-2 text-emerald-400">
-              <FolderTree className="size-10" />
-              <span className="text-caption">Drop files to attach</span>
+              <FolderTree className="size-8 sm:size-10" />
+              <span className="text-xs sm:text-sm">Drop files to attach</span>
             </div>
           </div>
         )}
 
         {/* Status & Quick Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-1">
+        <div className="flex flex-wrap items-center justify-center sm:justify-between gap-2 px-1">
           {statusText ? (
             <StatusIndicator statusText={statusText} />
           ) : (
             <div
-              className="flex items-center gap-2.5 text-white/30 text-caption px-4 animate-in fade-in duration-500"
+              className="hidden sm:flex items-center gap-2.5 text-white/30 text-caption px-4 animate-in fade-in duration-500"
               role="status"
             >
               <div className="size-1.5 rounded-full bg-white/10" aria-hidden="true" />
@@ -165,7 +165,7 @@ export function ChatInput({
           )}
 
           <div
-            className="flex items-center gap-2 bg-zinc-800/80 backdrop-blur-md p-2 rounded-2xl border border-zinc-700/80 shadow-xl"
+            className="flex items-center gap-1 sm:gap-2 bg-zinc-800/80 backdrop-blur-md p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border border-zinc-700/80 shadow-xl"
             role="toolbar"
             aria-label="Agent commands"
           >
@@ -175,30 +175,30 @@ export function ChatInput({
               onClick={onPauseToggle}
               disabled={disabled || !activeContext || isPausing}
               title={paused ? "Resume" : "Pause"}
-              className="size-10"
+              className="size-8 sm:size-10"
             >
-              {paused ? <Play className="size-5" /> : <Pause className="size-5" />}
+              {paused ? <Play className="size-4 sm:size-5" /> : <Pause className="size-4 sm:size-5" />}
             </Button>
 
-            <div className="w-px h-6 bg-zinc-700/60" aria-hidden="true" />
+            <div className="w-px h-5 sm:h-6 bg-zinc-700/60" aria-hidden="true" />
 
-            <Button size="icon" variant="outline" onClick={handleImportKnowledge} disabled={disabled} title="Import Knowledge" className="size-10">
-              <FileText className="size-5" />
+            <Button size="icon" variant="outline" onClick={handleImportKnowledge} disabled={disabled} title="Import Knowledge" className="size-8 sm:size-10 hidden sm:flex">
+              <FileText className="size-4 sm:size-5" />
             </Button>
-            <Button size="icon" variant="outline" onClick={onOpenFiles} disabled={disabled} title="Files" className="size-10">
-              <FolderOpen className="size-5" />
+            <Button size="icon" variant="outline" onClick={onOpenFiles} disabled={disabled} title="Files" className="size-8 sm:size-10">
+              <FolderOpen className="size-4 sm:size-5" />
             </Button>
-            <Button size="icon" variant="outline" onClick={onOpenHistory} disabled={disabled} title="History" className="size-10">
-              <History className="size-5" />
+            <Button size="icon" variant="outline" onClick={onOpenHistory} disabled={disabled} title="History" className="size-8 sm:size-10">
+              <History className="size-4 sm:size-5" />
             </Button>
-            <Button size="icon" variant="outline" onClick={onOpenContext} disabled={disabled} title="Context" className="size-10">
-              <MessageSquare className="size-5" />
+            <Button size="icon" variant="outline" onClick={onOpenContext} disabled={disabled} title="Context" className="size-8 sm:size-10 hidden sm:flex">
+              <MessageSquare className="size-4 sm:size-5" />
             </Button>
-            <Button size="icon" variant="outline" onClick={onOpenProjects} disabled={disabled} title="Projects" className="size-10">
-              <FolderTree className="size-5" />
+            <Button size="icon" variant="outline" onClick={onOpenProjects} disabled={disabled} title="Projects" className="size-8 sm:size-10">
+              <FolderTree className="size-4 sm:size-5" />
             </Button>
 
-            <div className="w-px h-6 bg-zinc-700/60" aria-hidden="true" />
+            <div className="w-px h-5 sm:h-6 bg-zinc-700/60" aria-hidden="true" />
 
             <Button
               size="icon"
@@ -206,22 +206,22 @@ export function ChatInput({
               onClick={handleNudge}
               disabled={disabled || !activeContext}
               title="Nudge Agent"
-              className="size-10"
+              className="size-8 sm:size-10"
             >
-              <ArrowRight className="size-5" />
+              <ArrowRight className="size-4 sm:size-5" />
             </Button>
           </div>
         </div>
 
         {/* Main Input Form */}
         <form action={formAction} className="relative group">
-          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 rounded-[var(--radius-4xl)] blur-xl opacity-0 group-focus-within:opacity-100 transition duration-700" />
+          <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 rounded-2xl sm:rounded-[var(--radius-4xl)] blur-xl opacity-0 group-focus-within:opacity-100 transition duration-700" />
           
-          <div className="relative flex flex-col bg-zinc-900/90 border border-zinc-800/80 rounded-[var(--radius-3xl)] shadow-3xl backdrop-blur-3xl overflow-hidden focus-within:border-emerald-500/40 focus-within:bg-zinc-900 transition-all duration-500">
+          <div className="relative flex flex-col bg-zinc-900/90 border border-zinc-800/80 rounded-2xl sm:rounded-[var(--radius-3xl)] shadow-3xl backdrop-blur-3xl overflow-hidden focus-within:border-emerald-500/40 focus-within:bg-zinc-900 transition-all duration-500">
             {/* File Previews */}
             {files.length > 0 && (
               <div
-                className="flex flex-wrap gap-2.5 p-5 border-b border-zinc-800/50 bg-black/40"
+                className="flex flex-wrap gap-2 p-3 sm:p-5 border-b border-zinc-800/50 bg-black/40"
                 aria-label="Attached files"
               >
                 {files.map((file, i) => (
@@ -230,11 +230,11 @@ export function ChatInput({
               </div>
             )}
 
-            <div className="flex items-end gap-3 p-4">
+            <div className="flex items-end gap-2 sm:gap-3 p-2 sm:p-4">
               {/* Attach Files Button */}
               <label
                 className={cn(
-                  "size-12 grid place-items-center rounded-2xl text-white/60 hover:text-emerald-400 hover:bg-emerald-500/10 cursor-pointer transition-all active:scale-90 flex-shrink-0",
+                  "size-10 sm:size-12 grid place-items-center rounded-xl sm:rounded-2xl text-white/60 hover:text-emerald-400 hover:bg-emerald-500/10 cursor-pointer transition-all active:scale-90 flex-shrink-0",
                   disabled && "cursor-not-allowed opacity-50"
                 )}
                 aria-label="Attach files"
@@ -247,7 +247,7 @@ export function ChatInput({
                   onChange={handleFileChange}
                   disabled={disabled}
                 />
-                <Paperclip className="size-5.5 rotate-45" aria-hidden="true" />
+                <Paperclip className="size-5 sm:size-5.5 rotate-45" aria-hidden="true" />
               </label>
 
               {/* Textarea */}
@@ -257,22 +257,22 @@ export function ChatInput({
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 onKeyDown={handleKeyDown}
-                placeholder="Send a message to Aussie Agents..."
+                placeholder="Send a message..."
                 rows={1}
                 disabled={disabled}
                 aria-label="Message Aussie Agents"
-                className="flex-1 bg-transparent text-white placeholder:text-white/20 outline-none resize-none text-[16px] leading-relaxed min-h-[48px] max-h-[250px] py-3.5 px-1 font-medium"
+                className="flex-1 bg-transparent text-white placeholder:text-white/20 outline-none resize-none text-base sm:text-[16px] leading-relaxed min-h-[40px] sm:min-h-[48px] max-h-[250px] py-2.5 sm:py-3.5 px-1 font-medium"
               />
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <button
                   type="button"
                   disabled={disabled || isPending}
                   aria-label="Full screen input"
-                  className="size-11 grid place-items-center rounded-2xl text-white/40 hover:text-white hover:bg-zinc-800/80 transition-all active:scale-90 disabled:opacity-50"
+                  className="size-9 sm:size-11 grid place-items-center rounded-xl sm:rounded-2xl text-white/40 hover:text-white hover:bg-zinc-800/80 transition-all active:scale-90 disabled:opacity-50"
                 >
-                  <Maximize2 className="size-5" aria-hidden="true" />
+                  <Maximize2 className="size-4 sm:size-5" aria-hidden="true" />
                 </button>
                 
                 <SubmitButton disabled={disabled || (!text.trim() && files.length === 0) || isPending} />
@@ -282,7 +282,7 @@ export function ChatInput({
         </form>
 
         {/* Footer */}
-        <div className="text-center">
+        <div className="text-center hidden sm:block">
           <p className="text-caption text-white/20 select-none italic tracking-ultra">
             Aussie Agents Workforce • Precision Intelligence • v1.0
           </p>

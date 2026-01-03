@@ -439,7 +439,7 @@ export const SettingsModal = memo(function SettingsModal({
                 {TAB_LABELS[activeTab] || activeTab}
               </h2>
               <div className="flex items-center gap-2 mt-0.5">
-                <Badge variant="secondary" size="sm" className="text-[9px] h-4">
+                <Badge variant="outline" size="sm" className="text-[9px] h-4">
                   {activeTab === 'tunnel' ? 'External Proxy' : `${filteredSections.reduce((acc, s) => acc + s.fields.length, 0)} Parameters`}
                 </Badge>
               </div>
