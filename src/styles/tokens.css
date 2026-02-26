@@ -230,84 +230,64 @@
 
 :root {
   /* Enhanced Brand Colors - Professional Teal/Emerald Palette */
-  --color-primary: hsl(162, 73%, 46%);         /* Vibrant teal-emerald */
-  --color-primary-dark: hsl(162, 80%, 35%);    /* Deep emerald */
-  --color-primary-light: hsl(162, 70%, 65%);   /* Light emerald */
-  --color-primary-glow: hsla(162, 73%, 46%, 0.3); /* For glows */
+  --color-primary: hsl(162, 73%, 46%);
+  --color-primary-dark: hsl(162, 80%, 35%);
+  --color-primary-light: hsl(162, 70%, 65%);
+  --color-primary-glow: hsla(162, 73%, 46%, 0.3);
 
-  /* Accent Color - Complementary Purple */
-  --color-accent: hsl(271, 85%, 62%);          /* Vibrant purple */
-  --color-accent-dark: hsl(271, 80%, 48%);     /* Deep purple */
-  --color-accent-light: hsl(271, 75%, 75%);    /* Light purple */
+  /* Accent Color */
+  --color-accent: hsl(271, 85%, 62%);
+  --color-accent-dark: hsl(271, 80%, 48%);
+  --color-accent-light: hsl(271, 75%, 75%);
 
-  /* Status Colors - Enhanced Vibrancy */
-  --color-success: hsl(142, 76%, 36%);         /* Rich green */
-  --color-success-light: hsl(142, 70%, 50%);   /* Bright green */
-  --color-warning: hsl(38, 92%, 50%);          /* Vibrant amber */
-  --color-warning-light: hsl(38, 100%, 58%);   /* Bright amber */
-  --color-error: hsl(0, 72%, 51%);             /* Vivid red */
-  --color-error-light: hsl(0, 84%, 60%);       /* Bright red */
-  --color-info: hsl(199, 89%, 48%);            /* Vibrant cyan */
-  --color-info-light: hsl(199, 95%, 58%);      /* Bright cyan */
+  /* Status Colors */
+  --color-success: hsl(142, 76%, 36%);
+  --color-success-light: hsl(142, 70%, 50%);
+  --color-warning: hsl(38, 92%, 50%);
+  --color-warning-light: hsl(38, 100%, 58%);
+  --color-error: hsl(0, 72%, 51%);
+  --color-error-light: hsl(0, 84%, 60%);
+  --color-info: hsl(199, 89%, 48%);
+  --color-info-light: hsl(199, 95%, 58%);
+}
 
-  /* Surface Colors - Refined Dark Palette */
-  --color-surface-100: hsl(240, 5%, 6%);       /* Almost black */
-  --color-surface-200: hsl(240, 4%, 9%);       /* Very dark */
-  --color-surface-300: hsl(240, 4%, 12%);      /* Dark */
-  --color-surface-400: hsl(240, 3%, 16%);      /* Medium dark */
-  --color-surface-500: hsl(240, 3%, 20%);      /* Medium */
+/* ---- DARK MODE (default) ---- */
+.dark, :root:not(:has(.light)) {
+  --color-surface-100: hsl(240, 5%, 6%);
+  --color-surface-200: hsl(240, 4%, 9%);
+  --color-surface-300: hsl(240, 4%, 12%);
+  --color-surface-400: hsl(240, 3%, 16%);
+  --color-surface-500: hsl(240, 3%, 20%);
   
-  /* Text Colors - Better Contrast */
-  --color-text-primary: hsl(0, 0%, 98%);       /* Near white */
-  --color-text-secondary: hsl(0, 0%, 78%);     /* Light gray */
-  --color-text-tertiary: hsl(0, 0%, 58%);      /* Medium gray */
-  --color-text-quaternary: hsl(0, 0%, 38%);    /* Dark gray */
-  --color-text-muted: hsl(0, 0%, 28%);         /* Very dark gray */
+  --color-text-primary: hsl(0, 0%, 98%);
+  --color-text-secondary: hsl(0, 0%, 78%);
+  --color-text-tertiary: hsl(0, 0%, 58%);
+  --color-text-quaternary: hsl(0, 0%, 38%);
+  --color-text-muted: hsl(0, 0%, 28%);
 
-  /* Border Colors - Subtle & Refined */
-  --color-border-strong: hsla(0, 0%, 100%, 0.12);  /* Strong border */
-  --color-border-medium: hsla(0, 0%, 100%, 0.08);  /* Medium border */
-  --color-border-light: hsla(0, 0%, 100%, 0.05);   /* Light border */
-  --color-border-subtle: hsla(0, 0%, 100%, 0.03);  /* Very subtle */
+  --color-border-strong: hsla(0, 0%, 100%, 0.12);
+  --color-border-medium: hsla(0, 0%, 100%, 0.08);
+  --color-border-light: hsla(0, 0%, 100%, 0.05);
+  --color-border-subtle: hsla(0, 0%, 100%, 0.03);
 
-  /* Interactive States */
   --color-hover: hsla(0, 0%, 100%, 0.08);
   --color-active: hsla(0, 0%, 100%, 0.15);
   --color-focus: var(--color-primary);
   --color-disabled: hsla(0, 0%, 50%, 0.3);
 
-  /* Component-Specific Colors */
-  
-  /* Tool Execution (Amber Theme) */
   --color-tool-bg: hsla(38, 92%, 50%, 0.08);
   --color-tool-border: hsla(38, 92%, 50%, 0.2);
   --color-tool: hsl(38, 100%, 58%);
   --color-tool-glow: hsla(38, 100%, 58%, 0.3);
 
-  /* Agent Reasoning (Purple Theme) */
   --color-thought-bg: hsla(271, 85%, 62%, 0.05);
   --color-thought-border: hsla(271, 85%, 62%, 0.12);
   --color-thought: hsl(271, 85%, 70%);
   --color-thought-glow: hsla(271, 85%, 62%, 0.25);
 
-  /* Response Cards */
-  --color-response-bg: linear-gradient(
-    180deg,
-    hsla(162, 20%, 15%, 0.4) 0%,
-    hsla(0, 0%, 8%, 0.6) 100%
-  );
   --color-response-border: hsla(162, 73%, 46%, 0.15);
-  
-  /* User Messages */
-  --color-user-bg: linear-gradient(
-    135deg,
-    hsl(240, 5%, 14%) 0%,
-    hsl(240, 4%, 10%) 50%,
-    hsl(0, 0%, 0%) 100%
-  );
   --color-user-border: hsla(0, 0%, 100%, 0.08);
 
-  /* Notification/Toast Colors */
   --color-toast-success-bg: hsla(142, 76%, 36%, 0.12);
   --color-toast-success-border: hsla(142, 76%, 36%, 0.3);
   --color-toast-warning-bg: hsla(38, 92%, 50%, 0.12);
@@ -317,17 +297,73 @@
   --color-toast-info-bg: hsla(199, 89%, 48%, 0.12);
   --color-toast-info-border: hsla(199, 89%, 48%, 0.3);
 
-  /* Modal & Overlay */
   --color-modal-backdrop: hsla(0, 0%, 0%, 0.85);
   --color-modal-bg: hsl(240, 4%, 9%);
   --color-modal-border: hsla(0, 0%, 100%, 0.08);
 
-  /* Glass Effects - Enhanced */
   --color-glass-bg: hsla(0, 0%, 0%, 0.6);
   --color-glass-border: hsla(0, 0%, 100%, 0.1);
   --color-glass-highlight: hsla(0, 0%, 100%, 0.05);
   
-  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  --gradient-surface: linear-gradient(180deg, var(--color-surface-200) 0%, var(--color-surface-100) 100%);
+  --gradient-glow: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 70%);
+}
+
+/* ---- LIGHT MODE ---- */
+.light {
+  --color-surface-100: hsl(0, 0%, 100%);
+  --color-surface-200: hsl(0, 0%, 98%);
+  --color-surface-300: hsl(0, 0%, 96%);
+  --color-surface-400: hsl(0, 0%, 93%);
+  --color-surface-500: hsl(0, 0%, 88%);
+
+  --color-text-primary: hsl(0, 0%, 9%);
+  --color-text-secondary: hsl(0, 0%, 25%);
+  --color-text-tertiary: hsl(0, 0%, 45%);
+  --color-text-quaternary: hsl(0, 0%, 60%);
+  --color-text-muted: hsl(0, 0%, 72%);
+
+  --color-border-strong: hsla(0, 0%, 0%, 0.15);
+  --color-border-medium: hsla(0, 0%, 0%, 0.10);
+  --color-border-light: hsla(0, 0%, 0%, 0.06);
+  --color-border-subtle: hsla(0, 0%, 0%, 0.03);
+
+  --color-hover: hsla(0, 0%, 0%, 0.05);
+  --color-active: hsla(0, 0%, 0%, 0.10);
+  --color-focus: var(--color-primary);
+  --color-disabled: hsla(0, 0%, 50%, 0.2);
+
+  --color-tool-bg: hsla(38, 92%, 50%, 0.08);
+  --color-tool-border: hsla(38, 92%, 50%, 0.25);
+  --color-tool: hsl(38, 80%, 40%);
+  --color-tool-glow: hsla(38, 100%, 58%, 0.15);
+
+  --color-thought-bg: hsla(271, 85%, 62%, 0.06);
+  --color-thought-border: hsla(271, 85%, 62%, 0.18);
+  --color-thought: hsl(271, 70%, 50%);
+  --color-thought-glow: hsla(271, 85%, 62%, 0.12);
+
+  --color-response-border: hsla(162, 73%, 46%, 0.2);
+  --color-user-border: hsla(0, 0%, 0%, 0.1);
+
+  --color-toast-success-bg: hsla(142, 76%, 36%, 0.08);
+  --color-toast-success-border: hsla(142, 76%, 36%, 0.25);
+  --color-toast-warning-bg: hsla(38, 92%, 50%, 0.08);
+  --color-toast-warning-border: hsla(38, 92%, 50%, 0.25);
+  --color-toast-error-bg: hsla(0, 72%, 51%, 0.08);
+  --color-toast-error-border: hsla(0, 72%, 51%, 0.25);
+  --color-toast-info-bg: hsla(199, 89%, 48%, 0.08);
+  --color-toast-info-border: hsla(199, 89%, 48%, 0.25);
+
+  --color-modal-backdrop: hsla(0, 0%, 0%, 0.5);
+  --color-modal-bg: hsl(0, 0%, 100%);
+  --color-modal-border: hsla(0, 0%, 0%, 0.1);
+
+  --color-glass-bg: hsla(0, 0%, 100%, 0.7);
+  --color-glass-border: hsla(0, 0%, 0%, 0.08);
+  --color-glass-highlight: hsla(0, 0%, 100%, 0.5);
+
   --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
   --gradient-surface: linear-gradient(180deg, var(--color-surface-200) 0%, var(--color-surface-100) 100%);
   --gradient-glow: radial-gradient(circle at 50% 0%, var(--color-primary-glow) 0%, transparent 70%);
