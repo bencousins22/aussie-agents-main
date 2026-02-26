@@ -205,8 +205,8 @@ export function Sidebar({
                   className={cn(
                     "group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer transition-all active:scale-[0.98]",
                     ctx.id === activeContext
-                      ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                      : "text-white/70 hover:bg-zinc-800/50 hover:text-white border border-transparent"
+                      ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground border border-transparent"
                   )}
                   onClick={() => {
                     setActiveContext(ctx.id);
@@ -217,7 +217,7 @@ export function Sidebar({
                   <div
                     className={cn(
                       "size-1.5 rounded-full flex-shrink-0 transition-all",
-                      ctx.id === activeContext ? "bg-emerald-400 scale-125 shadow-emerald-glow" : "bg-zinc-700"
+                      ctx.id === activeContext ? "bg-emerald-500 dark:bg-emerald-400 scale-125 shadow-emerald-glow" : "bg-muted-foreground/30"
                     )}
                     aria-hidden="true"
                   />
@@ -237,15 +237,15 @@ export function Sidebar({
                   </Button>
                 </div>
               ))}
-              {contexts.length === 0 && <p className="text-xs text-white/40 italic px-3 py-4 text-center">No chats yet</p>}
+              {contexts.length === 0 && <p className="text-xs text-muted-foreground italic px-3 py-4 text-center">No chats yet</p>}
             </div>
           </div>
 
           {/* Tasks section */}
-          <div className="p-3 border-t border-zinc-800/50">
+          <div className="p-3 border-t border-border">
             <button
               onClick={() => setTasksExpanded(!tasksExpanded)}
-              className="w-full flex items-center justify-between text-xs font-medium text-white/50 uppercase tracking-wider hover:text-white/70 px-2"
+              className="w-full flex items-center justify-between text-xs font-medium text-muted-foreground uppercase tracking-wider hover:text-foreground px-2"
             >
               <span className="flex items-center gap-2">
                 <ListTodo className="size-4" />

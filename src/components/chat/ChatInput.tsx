@@ -180,7 +180,7 @@ export function ChatInput({
   return (
     <div
       className={cn(
-        "w-full max-w-4xl mx-auto p-2 sm:p-6 bg-gradient-to-t from-black via-black/80 to-transparent transition-all duration-300",
+        "w-full max-w-4xl mx-auto p-2 sm:p-6 bg-gradient-to-t from-background via-background/80 to-transparent transition-all duration-300",
         disabled && "opacity-50 pointer-events-none grayscale-[0.5]"
       )}
       role="region"
@@ -204,16 +204,16 @@ export function ChatInput({
             <StatusIndicator statusText={statusText} />
           ) : (
             <div
-              className="hidden sm:flex items-center gap-2.5 text-white/30 text-caption px-4 animate-in fade-in duration-500"
+              className="hidden sm:flex items-center gap-2.5 text-muted-foreground/60 text-caption px-4 animate-in fade-in duration-500"
               role="status"
             >
-              <div className="size-1.5 rounded-full bg-white/10" aria-hidden="true" />
+              <div className="size-1.5 rounded-full bg-muted-foreground/20" aria-hidden="true" />
               <span>{connected ? "Ready" : "Backend Offline"}</span>
             </div>
           )}
 
           <div
-            className="flex items-center gap-1 sm:gap-2 bg-zinc-800/80 backdrop-blur-md p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border border-zinc-700/80 shadow-xl"
+            className="flex items-center gap-1 sm:gap-2 bg-muted/80 backdrop-blur-md p-1.5 sm:p-2 rounded-xl sm:rounded-2xl border border-border shadow-xl"
             role="toolbar"
             aria-label="Agent commands"
           >
@@ -228,7 +228,7 @@ export function ChatInput({
               {paused ? <Play className="size-4 sm:size-5" /> : <Pause className="size-4 sm:size-5" />}
             </Button>
 
-            <div className="w-px h-5 sm:h-6 bg-zinc-700/60" aria-hidden="true" />
+            <div className="w-px h-5 sm:h-6 bg-border" aria-hidden="true" />
 
             <Button size="icon" variant="outline" onClick={handleImportKnowledge} disabled={disabled} title="Import Knowledge" className="size-8 sm:size-10 hidden sm:flex">
               <FileText className="size-4 sm:size-5" />
@@ -246,7 +246,7 @@ export function ChatInput({
               <FolderTree className="size-4 sm:size-5" />
             </Button>
 
-            <div className="w-px h-5 sm:h-6 bg-zinc-700/60" aria-hidden="true" />
+            <div className="w-px h-5 sm:h-6 bg-border" aria-hidden="true" />
 
             <Button
               size="icon"
@@ -265,7 +265,7 @@ export function ChatInput({
         <form action={formAction} className="relative group">
           <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-emerald-500/20 rounded-2xl sm:rounded-[var(--radius-4xl)] blur-xl opacity-0 group-focus-within:opacity-100 transition duration-700" />
           
-          <div className="relative flex flex-col bg-zinc-900/90 border border-zinc-800/80 rounded-2xl sm:rounded-[var(--radius-3xl)] shadow-3xl backdrop-blur-3xl overflow-hidden focus-within:border-emerald-500/40 focus-within:bg-zinc-900 transition-all duration-500">
+          <div className="relative flex flex-col bg-card/90 border border-border rounded-2xl sm:rounded-[var(--radius-3xl)] shadow-3xl backdrop-blur-3xl overflow-hidden focus-within:border-emerald-500/40 focus-within:bg-card transition-all duration-500">
             {/* File Previews */}
             {files.length > 0 && (
               <div

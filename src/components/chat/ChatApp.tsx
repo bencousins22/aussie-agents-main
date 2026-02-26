@@ -283,24 +283,24 @@ export function ChatApp() {
                 <div className="size-2 rounded-full bg-emerald-400 opacity-60" />
                 <div className="size-2 rounded-full bg-emerald-400 opacity-30" />
               </div>
-              <span className="text-sm text-white/60 font-medium hidden sm:inline">Aussie Agents is thinking...</span>
-              <span className="text-sm text-white/60 font-medium sm:hidden">Thinking...</span>
+              <span className="text-sm text-muted-foreground font-medium hidden sm:inline">Aussie Agents is thinking...</span>
+              <span className="text-sm text-muted-foreground font-medium sm:hidden">Thinking...</span>
             </div>
           )}
           {visibleMessages.length === 0 ? (
             <div className="flex items-center justify-center h-full px-4 sm:px-6">
-              <div className="text-center text-white/50 max-w-lg">
-                <div className="size-20 sm:size-24 mx-auto mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl bg-zinc-800 border border-zinc-700 grid place-items-center text-2xl sm:text-3xl font-bold text-emerald-400 shadow-xl shadow-emerald-500/20">
+              <div className="text-center max-w-lg">
+                <div className="size-20 sm:size-24 mx-auto mb-4 sm:mb-6 rounded-2xl sm:rounded-3xl bg-muted border border-border grid place-items-center text-2xl sm:text-3xl font-bold text-emerald-600 dark:text-emerald-400 shadow-xl shadow-emerald-500/20">
                   AA
                 </div>
-                <p className="text-lg sm:text-xl font-black bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tighter">
+                <p className="text-lg sm:text-xl font-black bg-gradient-to-r from-teal-600 to-emerald-600 dark:from-teal-400 dark:to-emerald-400 bg-clip-text text-transparent mb-2 sm:mb-3 tracking-tighter">
                   Aussie Agents
                 </p>
-                <p className="text-xs sm:text-sm text-white/40 mb-4 sm:mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
-                <div className="flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-white/30">
-                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
+                <p className="text-xs sm:text-sm text-muted-foreground mb-4 sm:mb-5 font-medium">Your specialized agent workforce. Ready to build, research, and automate.</p>
+                <div className="flex items-center justify-center gap-3 text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+                  <div className="size-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                   <span>System Online</span>
-                  <div className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
+                  <div className="size-1.5 rounded-full bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_rgba(52,211,153,0.5)]" />
                 </div>
               </div>
             </div>
@@ -346,10 +346,10 @@ export function ChatApp() {
       </div>
 
       <Suspense fallback={
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-          <div className="bg-zinc-900 border border-zinc-800 p-6 rounded-[28px] shadow-2xl flex flex-col items-center gap-4">
-            <Loader2 className="size-8 text-emerald-400 animate-spin" />
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">Initializing Module...</span>
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/40 backdrop-blur-sm">
+          <div className="bg-card border border-border p-6 rounded-[28px] shadow-2xl flex flex-col items-center gap-4">
+            <Loader2 className="size-8 text-emerald-600 dark:text-emerald-400 animate-spin" />
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">Initializing Module...</span>
           </div>
         </div>
       }>
@@ -399,19 +399,19 @@ export function ChatApp() {
       {searchOpen && (
         <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 p-3">
           <div
-            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+            className="absolute inset-0 bg-background/80 backdrop-blur-sm"
             onClick={() => setSearchOpen(false)}
           />
           <div
-            className="relative w-full max-w-lg bg-zinc-900 rounded-xl border border-zinc-800 shadow-2xl"
+            className="relative w-full max-w-lg bg-card rounded-xl border border-border shadow-2xl"
             onMouseDown={(e) => e.stopPropagation()}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-3 border-b border-zinc-800 flex items-center justify-between">
-              <h3 className="text-xs font-semibold text-white">Search Chat History</h3>
+            <div className="p-3 border-b border-border flex items-center justify-between">
+              <h3 className="text-xs font-semibold text-foreground">Search Chat History</h3>
               <button
                 onClick={() => setSearchOpen(false)}
-                className="size-7 grid place-items-center rounded-lg text-white/80 hover:text-white hover:bg-zinc-800"
+                className="size-7 grid place-items-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted"
               >
                 <X className="size-4" />
               </button>
@@ -422,11 +422,11 @@ export function ChatApp() {
                 placeholder="Search messages..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full px-3 py-2.5 sm:py-2 rounded-lg border border-zinc-800 bg-black/30 text-sm text-white placeholder:text-white/70 outline-none focus:border-emerald-400/40"
+                className="w-full px-3 py-2.5 sm:py-2 rounded-lg border border-border bg-muted text-sm text-foreground placeholder:text-muted-foreground outline-none focus:border-emerald-400/40"
                 autoFocus
                 autoComplete="off"
               />
-              <div className="mt-2 text-[11px] sm:text-xs text-white/80">
+              <div className="mt-2 text-[11px] sm:text-xs text-muted-foreground">
                 Found {visibleMessages.length} messages
               </div>
             </div>
